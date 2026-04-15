@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>foo_vis_vumeter Manual</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="pandoc-docs.css" />
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#foo_vis_vumeter"
+id="toc-foo_vis_vumeter"><em>foo_vis_vumeter</em></a>
+<ul>
+<li><a href="#features" id="toc-features">Features</a></li>
+<li><a href="#verification" id="toc-verification">Verification</a></li>
+<li><a href="#run-requirements-and-installation"
+id="toc-run-requirements-and-installation">Run Requirements and
+Installation</a>
+<ul>
+<li><a href="#panels-or-skins" id="toc-panels-or-skins">Panels or
+Skins</a></li>
+</ul></li>
+<li><a href="#usage" id="toc-usage">Usage</a>
+<ul>
+<li><a href="#tuning-mode-selection"
+id="toc-tuning-mode-selection">Tuning Mode Selection</a></li>
+<li><a href="#tuning-dialog-box" id="toc-tuning-dialog-box">Tuning
+Dialog Box</a></li>
+<li><a href="#mixer-dialog-box" id="toc-mixer-dialog-box">Mixer Dialog
+Box</a></li>
+</ul></li>
+<li><a href="#layout-suffix" id="toc-layout-suffix">Layout
+Suffix</a></li>
+<li><a href="#main-menu" id="toc-main-menu">Main Menu</a></li>
+<li><a href="#gestures" id="toc-gestures">Gestures</a></li>
+<li><a href="#horizontal-mouse-wheel-button-4-and-button-5"
+id="toc-horizontal-mouse-wheel-button-4-and-button-5">Horizontal Mouse
+Wheel, Button 4 and Button 5</a></li>
+<li><a href="#screenshot" id="toc-screenshot">Screenshot</a></li>
+<li><a href="#keyboard-shortcuts" id="toc-keyboard-shortcuts">Keyboard
+Shortcuts</a></li>
+<li><a href="#dynamics" id="toc-dynamics">Dynamics</a>
+<ul>
+<li><a href="#needle-behavior-derivation-methodology"
+id="toc-needle-behavior-derivation-methodology">Needle Behavior
+Derivation Methodology</a></li>
+</ul></li>
+<li><a href="#bin-file-specification"
+id="toc-bin-file-specification"><code>.bin</code> File
+Specification</a></li>
+<li><a href="#aimp-analog-zip-specification"
+id="toc-aimp-analog-zip-specification">AIMP Analog <code>.zip</code>
+Specification</a></li>
+<li><a href="#aimp-led-zip-specification-lvu"
+id="toc-aimp-led-zip-specification-lvu">AIMP LED <code>.zip</code>
+Specification (LVU)</a></li>
+<li><a href="#foobar2000-rar-specification"
+id="toc-foobar2000-rar-specification">foobar2000 <code>.rar</code>
+Specification</a>
+<ul>
+<li><a href="#standalone-ini-file"
+id="toc-standalone-ini-file">Standalone <code>.ini</code> File</a></li>
+</ul></li>
+<li><a href="#com-interface-specification"
+id="toc-com-interface-specification">COM Interface Specification</a>
+<ul>
+<li><a href="#functions" id="toc-functions">Functions</a></li>
+<li><a href="#enums" id="toc-enums">Enums</a></li>
+<li><a href="#interfaces" id="toc-interfaces">Interfaces</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="foo_vis_vumeter"><em>foo_vis_vumeter</em></h1>
+<p><em>foo_vis_vumeter</em> is modern reimplementation of the analog VU
+meter component by DRON. It renders using DirectX 12.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Uses DirectX 12 (Direct3D 12, DXGI 1.6, Direct2D 1.3, DirectWrite
+1.3) for rendering.</li>
+<li>Supports VUEditor-generated <code>.bin</code> files. Refer to the
+"<code>.bin</code> File Specification" and "foobar2000 <code>.rar</code>
+Specification" sections below.</li>
+<li>Supports AIMP analog <code>.zip</code> skins. Refer to the "AIMP
+Analog <code>.zip</code> Specification" below.</li>
+<li>Supports AIMP LED <code>.zip</code> skins. Refer to the "AIMP LED
+<code>.zip</code> Specification" below.</li>
+<li>Includes many fine-tuning options and modes.</li>
+<li>Implements controls through the mouse context menu.</li>
+<li>Incorporates a tuning dialog and a mixer dialog for extra
+customization.</li>
+<li>Supports the Default User Interface (Default UI) and the Columns
+User Interface (Columns UI).</li>
+<li>Implements COM Automation through ActiveX/host objects.</li>
+<li>Delivers 32-bit and 64-bit x86 component configurations as well as
+ARM64EC.</li>
+</ul>
+<h2 id="verification">Verification</h2>
+<ul>
+<li>Tested on foobar2000 v2.25.8 (x86 64-bit) and Microsoft Windows 11
+(Build 26200).</li>
+<li>Built for foobar2000 v2.0 and later (2025-03-07) with latest Windows
+11 SDK (10.0.26100.7705) and MSVC (v145).</li>
+</ul>
+<h2 id="run-requirements-and-installation">Run Requirements and
+Installation</h2>
+<ul>
+<li>Requires foobar2000 v2.0 or later.</li>
+<li>Requires Windows 10 or later due to DirectX 12.
+<ul>
+<li>Falls back to the WARP software rasterizer if no DirectX
+12-compatible adapter found.</li>
+</ul></li>
+<li>Download <a
+href="https://www.foobar2000.org/download">foobar2000</a> and
+install.</li>
+<li>Download the installation file
+(<code>foo_vis_vumeter.fb2k-component</code>) from the <a
+href="https://www.foobar2000.org/components/view/foo_vis_vumeter">component
+page</a>.</li>
+<li>Import <code>foo_vis_vumeter.fbk2-component</code> into foobar2000
+using the <strong>File &gt; Preferences &gt; Components &gt;
+Install...</strong> menu item.</li>
+<li>Download and extract panels or skins into this component's directory
+of foobar2000. This should be
+<code>&lt;foobar2000 profile folder&gt;\vumeter</code>.</li>
+</ul>
+<h3 id="panels-or-skins">Panels or Skins</h3>
+<p>The panels or skins files define the visualizations.</p>
+<p>The foobar2000 component is not packaged with any panels. It supports
+various formats, namely foobar2000 <code>.bin</code> files, AIMP analog
+<code>.zip</code> skins and AIMP LED <code>.zip</code> skins.</p>
+<p>Use these references to find community-made skins or create new ones
+using VUEditor:</p>
+<ul>
+<li><a
+href="https://audio-file.org/foobar2000-vu-meter-skins-gallery/">foobar2000
+VU Meter Skin Gallery</a>: A collection of skins compiled and curated by
+tom2tec.</li>
+<li><a href="https://foobar2000.ru/forum/viewtopic.php?t=5012">Custom
+Skin Thread</a> (in Russian).</li>
+<li><a href="https://foobar2000.ru/forum/viewtopic.php?t=4061">Pointer
+Pickmeter (foo_vis_vumeter.dll) Thread</a> by DRON with download links
+to <code>VUEditor.zip</code> (in Russian).</li>
+<li><a href="https://www.aimp.ru/forum/index.php?topic=52865.0">AIMP
+Analog Meter (Plugin Skins) Thread</a> (in Russian): Another collection
+of skins collected and curated by Artem (AIMP main developer).</li>
+<li><a href="https://www.aimp.ru/forum/index.php?topic=54005">AIMP LVU
+Thread</a> (in Russian): LED skins and editor by xrEngine.</li>
+<li>Some newly developed panels have been posted to the <a
+href="https://hydrogenaudio.org/index.php/topic,126733.0.html"><code>foo_vis_vumeter</code>
+thread</a> in the HydrogenAudio Forum.</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>The component is controlled via the context menu, accessible by
+right-clicking anywhere on the component window. In addition, fine
+tuning can be performed by using the mouse wheel.</p>
+<p>What the mouse wheel controls is selected through the "Tuning" menu.
+If the changes result in bad state, use the "Options &gt; Reset" option.
+The selected tuning mode value can be reset to its default using middle
+click.</p>
+<p>In the context menu there are a few symbols placed next to some
+options. These are their meaning:</p>
+<ul>
+<li><em>Circle</em>: an option that is mutually exclusive with its
+neighbors.</li>
+<li><em>Square</em>: a selection that is mutually exclusive with its
+neighbors that is currently tunable by the mouse wheel.</li>
+<li><em>Eighth Note</em> with <em>Triangle</em>: a selection has been
+made in a child/nested menu.</li>
+<li><em>Check Mark</em>: a Boolean option that is enabled when checked
+and disabled when unchecked.</li>
+<li><em>Right Caret</em>: there is a nested menu that will open on mouse
+hover.</li>
+<li><em>Bold Text</em>: this options is the default action, double
+clicking the window performs it.</li>
+<li><em>Grayed Text</em>: this option is invalid at the present time or
+disabled.</li>
+</ul>
+<p>What follows are the different menu categories with a short
+explanation of each option.</p>
+<p>At the very top of the context menu, the current resolution of the
+loaded panel is displayed as a grayed informational item. If no panel is
+loaded, it shows a corresponding message.</p>
+<p><em>Layout</em>:</p>
+<ul>
+<li><em>Left + Right (H)</em>: displays the left panel and right panel
+abutted side-by-side.</li>
+<li><em>Left + Right (V)</em>: displays the left panel abutted above the
+right panel.</li>
+<li><em>Left</em>: displays only the left panel.</li>
+<li><em>Right</em>: displays only the right panel.</li>
+<li><em>Mono</em>: displays only the left panel and the needle shows a
+mixed-down version of the audio.</li>
+<li><em>Lock Aspect Ratio</em>: locks the panel or skin to the native
+dimensions' ratio instead of filling the window.</li>
+</ul>
+<p><em>Mode</em>:</p>
+<ul>
+<li><em>Stereo</em>: the default and shows discrete left and right
+channels. In multi-channel audio, the left channels are mixed down into
+one with specific weighing to be displayed in the left panel and
+similarly with the right channels for the right panel. The center and
+LFE channels are mixed into left and right with an even share going into
+each.</li>
+<li><em>Sum (Left + Right)</em>: shows the average of the sum of the
+left and right channels.</li>
+<li><em>Sum (Left || Right)</em>: shows either the left or right
+channels, whichever is greater.</li>
+<li><em>Mid/Side</em>: shows mid and side components of the audio
+signal. Mid is shown in the left panel and is calculated as
+<code>(left + right) / 2</code>. Side is show in the right panel and is
+calculated as <code>(left - right) / 2</code>. Same downmixing into left
+and right channels for multi-channel audio as the Stereo mode applies
+before mid and side components are calculated.</li>
+</ul>
+<p><em>Levels</em>:</p>
+<ul>
+<li><em>RMS</em>: the default and calculates root mean square of the
+samples in the sample window.</li>
+<li><em>Peak</em>: finds the highest (absolute value) sample in the
+sample window.</li>
+<li><em>Mixed</em>: uses "RMS" for the needle/pin or main display
+element and, if the panel includes them, uses "Peak" for the
+LEDs/lamps.</li>
+<li><em>BS.1770</em>: calculates loudness as prescribed in <a
+href="https://www.itu.int/dms_pubrec/itu-r/rec/bs/R-REC-BS.1770-5-202311-I!!PDF-E.pdf">Rec.
+ITU-R BS.1770-5</a>--except for the 400ms window as that is
+controlled/fine-tuned by the sample window option.</li>
+<li><em>R 128</em>: calculates loudness as prescribed in <a
+href="https://tech.ebu.ch/docs/r/r128.pdf">EBU R 128-2023</a> using the
+<code>libebur128</code> library--except for the 400ms window as that is
+controlled/fine-tuned by the sample window option.</li>
+</ul>
+<p><em>Movement</em>:</p>
+<ul>
+<li><em>No Inertia</em>: applies no post-processing to the needle
+movement.</li>
+<li><em>ODE Roots</em>: the default and uses the roots of the
+mass-spring differential equation to simulate the needle movement.</li>
+<li><em>PID Control</em>: uses a PID controller to govern the needle
+movement. The tuning dialog has PID gain parameters. Kp and Ki can range
+from 0 to 50 with a precision of 3 decimal places. Kd can range from 0
+to 0.01 with a precision of 4 decimal places. This is very hard to get
+right.</li>
+<li><em>Spring-Mass-Damper</em>: uses the second-order roots of a
+spring-mass-damper system to simulate the needle movement. The tuning
+dialog has "Speed" and "Damping" parameters that are only enabled when
+this movement mode is selected. Speed can range from 0.3 to 2.0 (default
+1.0) and damping from 0.5 to 1.1 (default 0.7).</li>
+<li><em>Curve Fit</em>: moves the needle on top of a precomputed
+exponential curve based on the sample rate and frame time. When this
+movement mode is selected, the "Window" tuning parameter range is
+restricted to [30, 120] ms.</li>
+</ul>
+<p><em>Decay</em>:</p>
+<ul>
+<li><em>Slow</em>: sets the decay factor to 0.0075.</li>
+<li><em>Normal</em>: sets the decay factor to 0.01.</li>
+<li><em>Fast</em>: the default and sets the decay factor to 0.015.</li>
+</ul>
+<p><em>Tuning</em> (mouse wheel-controlled):</p>
+<ul>
+<li><em>Zero</em>: sets the offset in frames from the default zero
+frame. Only applies to foobar2000 <code>.bin</code> panels. Default is 0
+and the range is [-128.0, 512.0]. If:
+<ul>
+<li><code>Ctrl</code> key is held down during the mouse wheel scroll,
+the step size is 100.</li>
+<li><code>Shift</code> key is held down during the mouse wheel scroll,
+the step size is 10.</li>
+<li><code>Left Alt</code> key is held down during the mouse wheel
+scroll, the step size is 0.1.</li>
+<li>No key is held down during the mouse wheel scroll, the step size is
+1.</li>
+</ul></li>
+<li><em>Range</em>: compresses the range of the needle drawing space.
+Only applies to foobar2000 <code>.bin</code> panels when a level other
+than BS.1770 or R 128 is selected. Default is 0 and the range is [0.0,
+2.0] in steps of 0.01.</li>
+<li><em>Decay</em>: sets how fast the needle falls per frame. Can also
+be set to predetermined values in the "Decay" menu. Default is 0.015 and
+the range is [0.0075, 0.03] in steps of 0.0005. Note: the tooltip
+display value is multiplied by 100.</li>
+<li><em>Rise</em>: sets how fast the needle rises per frame. Default is
+0.25 and the range is [0.01, 0.80] in steps of 0.01.</li>
+<li><em>Jitter</em>: sets the minimum loudness change threshold needed
+for the needle to move. Default is 0 and the range is [0.0, 0.050] in
+steps of 0.001. Note: the tooltip display value is multiplied by
+10.</li>
+<li><em>Gain</em>: sets the preamplifier gain in dB. Default is 0 and
+the range is [-60.0, 60.0]. If:
+<ul>
+<li><code>Ctrl</code> key is held down during the mouse wheel scroll,
+the step size is 10.</li>
+<li><code>Shift</code> key is held down during the mouse wheel scroll,
+the step size is 0.1.</li>
+<li><code>Left Alt</code> key is held down during the mouse wheel
+scroll, the step size is 0.01</li>
+<li>No key is held down during the mouse wheel scroll, the step size is
+1.</li>
+</ul></li>
+<li><em>Window</em>: sets the sampling window size in milliseconds.
+Default is 64 and the range is [10.0, 400.0] in unit steps.</li>
+<li><em>FPS</em>: sets the maximum number of frames rendered per second.
+Default is 60 and the range is [24.0, 60.0] in unit steps.</li>
+<li><em>Corner</em>: sets the default corner radius width in pixels of
+the skin image size. Can also be set to enabled or disabled from the
+"Options" menu. Default is 16 and the range is [0.0, 32.0] in steps of
+1.6.</li>
+<li><em>Timeout</em>: sets the background window request message timeout
+in milliseconds during transparency. Default is 250 and the range is
+[15.0, 1000.0] in unit steps.</li>
+</ul>
+<p><em>Options</em>:</p>
+<ul>
+<li><em>Downmix Channels</em>: instructs foobar2000 to combine all
+channels into one. This occurs in the player <strong>before</strong> any
+of this component's processing. It is disabled by default.</li>
+<li><em>Rounded Corners</em>: sets the corner tuning option to 0.0
+(unchecked) or 16.0 (checked and default).</li>
+<li><em>Cubic Interpolation</em>: selects between high quality cubic
+(enabled and default) and linear (disabled) Direct2D interpolation
+modes.</li>
+<li><em>Disable Tuning</em>: disables the tuning menu and makes the
+component ignore the mouse wheel. The tuning menu is enabled by
+default.</li>
+<li><em>Disallow Fullscreen</em>: disables fullscreening through mouse,
+menu and keyboard. Fullscreen toggling is enabled by default.</li>
+<li><em>Multi-Monitor Fullscreen</em>: sets the fullscreen mode to span
+across all screens instead of only the single screen where the player is
+active. This option is only available when multiple monitors are
+connected and not already in fullscreen.</li>
+<li><em>Remove Background</em>: removes the edge-sampled background and
+simply uses a dark or light mode default color. By default the sampled
+background is shown.</li>
+<li><em>Enable Transparency</em>: enables transparency in Columns UI for
+panels that support it such as JSP3 and JSplitter. Note that this mode
+incurs a heavy performance penalty when enabled; it is especially
+noticeable during windowing events such as resizing. As such it is
+disabled by default.</li>
+<li><em>Ignore Defaults</em>: ignores the defaults set in
+<code>.ini</code> files that may accompany the <code>.bin</code> files,
+both loose and archived in <code>.rar</code>, and disables automatic
+layout selection from filename layout suffixes. Defaults are not ignored
+by default.</li>
+<li><em>Equivalent Pause and Stop</em>: makes pausing and stopping
+equivalent. By default, when disabled and paused, simulation state is
+held. When enabled, regardless of whether paused or stopped, the
+simulation decays to zero.</li>
+<li><em>Freeze</em>: freezes video frame. It is not enabled by
+default.</li>
+<li><em>Show Counter</em>: displays a frame counter on the top right. It
+is not shown by default.</li>
+<li><em>Screensaver Mode</em>: switches skins/panels automatically after
+a specific interval. The switching occurs only within the same group
+(folder). The switching interval (period) of this mode is controlled
+through a slider in the tuning dialog; the default value is 18 seconds
+and the range is [1, 1200] seconds. The mode is disabled by
+default.</li>
+<li><em>Vertical Synchronization</em>: disabled and not functional. When
+an easter egg mode is active, this option changes to "Easter Egg" and
+can be used to deactivate it.</li>
+<li><em>Rescan</em>: Rescans panels directory.</li>
+<li><em>Reset</em>: Resets all options to their defaults except
+layout/visual options.</li>
+</ul>
+<p><em>Configure</em>: opens a dialog box with the tuning options.</p>
+<p><em>Mix</em>: opens a dialog box with the channel level mixer
+board.</p>
+<p><em>Explore</em>: opens the profile directory in Windows
+Explorer.</p>
+<p><em>Fullscreen</em>: toggles the component between fullscreen mode
+and embedded or windowed mode. Keeps the screen on and stops the
+screensaver from starting during fullscreen. In fullscreen mode, the
+mouse cursor is automatically hidden after 1 second of inactivity and
+reappears on mouse movement or context menu interaction.</p>
+<blockquote>
+<p>The <em>Fullscreen</em> option is bolded because it is the
+double-click default.</p>
+</blockquote>
+<p>The different panels/skins found during the scan of the
+<code>&lt;foobar2000 profile folder&gt;\vumeter</code> directory appear
+in lexicographical order (directories first) below the "Fullscreen"
+toggle.</p>
+<p>There are some options under: <strong>Preferences &gt; Advanced &gt;
+Visualisations &gt; VU Meter</strong>:</p>
+<ul>
+<li><em>Debug output</em>: <code>&lt;unchecked&gt;</code>. Enables debug
+console logging.</li>
+<li><em>Optimize memory</em>: <code>&lt;unchecked&gt;</code>. Unloads
+resources when the component window is hidden.</li>
+<li><em>Panels directory</em>: <code>&lt;empty&gt;</code> (implies
+<code>&lt;foobar2000 profile folder&gt;\vumeter\</code> when empty).
+Supports <code>%fb2k_profile_path%</code> and environment variables
+(also enclosed between <code>%</code>; DOS-style).</li>
+<li><em>Degreelessness</em>: (<code>&lt;empty&gt;</code>; untested). If
+the MD5 hash of the entered string matches a specific digest, the teapot
+easter egg mode is activated on launch.</li>
+</ul>
+<h3 id="tuning-mode-selection">Tuning Mode Selection</h3>
+<p>The currently selected tuning parameter is denoted by a square symbol
+under the context menu's <em>Tuning</em> popup. The selected tuning
+parameter can be changed by three main methods. The first is directly
+through selecting the desired one in the context menu. The second is
+using a modifier key and the vertical mouse wheel together to cycle
+through the parameters in menu order. The modifier key that must be held
+down while the vertical mouse wheel turns is one of <code>Esc</code>,
+<code>Right Alt</code> or <code>AltGr</code>. The third is to use the
+horizontal mouse scroll wheel. As the tuning parameter changes, the
+mouse tooltip should display the active one and its current value.</p>
+<p>Once again, the selected tuning mode value can be reset to its
+default using middle click and all tuning parameters will fall back to
+their defaults if the <em>Options</em> &gt; <em>Reset</em> option is
+used.</p>
+<blockquote>
+<p>Note: selecting a parameter simply means this is the one that will be
+affected by the mouse wheel and middle mouse click. The combination of
+all settings and tuning parameter values determines the visualization's
+behavior appearance.</p>
+</blockquote>
+<h3 id="tuning-dialog-box">Tuning Dialog Box</h3>
+<p>Tuning can also be done through the context menu's <em>Configure</em>
+dialog box. Notes:</p>
+<ul>
+<li>Only one dialog box can be open at a time and it is modeless.</li>
+<li>The panel selection will only affect the instance from where the
+dialog was launched, whereas all of the other tuning parameters affect
+every instance.</li>
+<li>Changes are reflected in real time.</li>
+<li>Clicking "Cancel" or "X" (in the system menu bar) will undo any
+changes back to the state when the dialog box was opened. Either of
+these will also close the dialog box.</li>
+<li>Clicking "Reset" will revert all options to their default values
+(exactly equivalent to the reset option in the context menu).</li>
+<li>Clicking "Font" will open a font selection dialog for customizing
+the FPS counter text properties (family, style, size, weight, and
+color). The dialog shows a live preview.</li>
+<li>Clicking "OK" will keep the changes and close the dialog box.</li>
+<li>All combos, buttons, sliders and edit boxes include tooltips and are
+tab stops.</li>
+<li>Sliders can be controlled using the mouse by dragging the slider or
+by the mouse wheel. Also using the keyboard's arrow keys and
+<code>Home</code>/<code>PgUp</code>/<code>PgDn</code>/<code>End</code>.</li>
+<li>When the dragging a slider with the mouse, the edit box value and
+the tune value itself are updated only when the dragging ends (i.e.,
+left mouse button released).</li>
+<li>Editing the tune value with the keyboard directly might be difficult
+due to the real-time validation.</li>
+<li>The dialog box takes on the default theming colors based on light or
+dark mode selection in foobar2000.</li>
+</ul>
+<h3 id="mixer-dialog-box">Mixer Dialog Box</h3>
+<p>Channel level mixing can be customized through the context menu's
+<em>Mix</em> dialog box. Notes:</p>
+<ul>
+<li>Only one dialog box can be open at a time and it is modeless.</li>
+<li>The mix will affect every instance, however the color box only
+affects the instance where the dialog was launched.</li>
+<li>The sliders have their loudest setting (0 dB) at the top and their
+quietest (-12 dB) at the bottom.</li>
+<li>The color box will only appear for <code>.bin</code> panels. It
+contains the edge-sampled RGB hexadecimal background color. It can be
+changed to any other valid color, overriding the automatically-sampled
+color.</li>
+<li>The "Enable mixer" checkbox is automatically selected and
+deselected. It is selected when the level mode is <em>not</em> BS.1770
+or R 128.</li>
+<li>Clicking the "Default" button will reset the mixer sliders to their
+default values and the color box to the edge-sampled value.</li>
+<li>Clicking "Cancel" or "X" (in the system menu bar) will undo any
+changes back to the state when the dialog box was opened. Either of
+these will also close the dialog box.</li>
+<li>Clicking "OK" will keep the changes and close the dialog box.</li>
+<li>The left channels are front left (L) [0 dB], back left (BL) [-3 dB],
+front center left (FCL) [-6 dB], side left (SL) [-3 dB], top front left
+(TFL) [-3 dB] and top back left (TBL) [-3 dB].</li>
+<li>The right channels are front right (R) [0 dB], back right (BR) [-3
+dB], front center right (FCR) [-6 dB], side right (SR) [-3 dB], top
+front right (TFR) [-3 dB] and top back right (TBR) [-3 dB].</li>
+<li>The center channels are front center (C) [-3 dB], low frequency
+effects (LFE) [-10 dB], back center (BC) [-6 dB], top center (TC) [-6
+dB], top front center (TFC) [-6 dB] and top back center (TBC) [-6
+dB].</li>
+</ul>
+<h2 id="layout-suffix">Layout Suffix</h2>
+<p>Skin filenames can include a layout suffix using the pattern
+<code>{N}</code> where <code>N</code> is a number from 0 to 4
+corresponding to the layout modes (0 = Left+Right H, 1 = Left+Right V, 2
+= Left, 3 = Right, 4 = Mono). When a skin with a layout suffix is
+loaded, the layout is automatically set to the specified mode. The
+suffix is removed from the display name in the context menu. This
+behavior is disabled when "Ignore Defaults" is enabled.</p>
+<h2 id="main-menu">Main Menu</h2>
+<p>The component adds a dynamic menu item under foobar2000's main menu
+(hidden by default; hold <code>Shift</code> when opening to reveal). It
+displays the panel groups and skins, along with "Previous" and "Next"
+navigation commands per group.</p>
+<h2 id="gestures">Gestures</h2>
+<p>The press-and-tap touch gesture switches skins/panels within the same
+group.</p>
+<h2 id="horizontal-mouse-wheel-button-4-and-button-5">Horizontal Mouse
+Wheel, Button 4 and Button 5</h2>
+<p>The horizontal mouse wheel and buttons 4 and 5 can be used to cycle
+through the selected tuning option. Be aware that buttons 4 and 5 might
+have other side-effects in the player such as moving to the next or
+previous track.</p>
+<h2 id="screenshot">Screenshot</h2>
+<p>A screenshot can be taken by holding <code>Ctrl</code> and
+left-clicking on the component window. The screenshot is saved as a PNG
+file in the <code>screenshots</code> subfolder of the panels directory.
+Files are named sequentially (<code>shot_00.png</code>,
+<code>shot_01.png</code>, etc.).</p>
+<h2 id="keyboard-shortcuts">Keyboard Shortcuts</h2>
+<p>As with the mouse buttons, be aware that any custom keyboard
+shortcuts set in the player can alter or prevent the component from
+reacting to these.</p>
+<ul>
+<li><code>Alt</code> + <code>Enter</code>: toggles fullscreen.</li>
+<li><code>Esc</code>: exits an easter egg mode (teapot or text
+entry).</li>
+<li><code>Backspace</code>: removes the last character in text entry
+mode.</li>
+<li><code>Delete</code>: clears all text in text entry mode.</li>
+<li><code>Page Up</code> / <code>Page Down</code>: changes the texture
+in teapot mode.</li>
+<li>Konami Code
+(<code>Up Up Down Down Left Right Left Right B A</code>): activates the
+teapot easter egg.</li>
+<li>Doom cheat code (<code>I D D Q D</code>): activates the text entry
+easter egg.</li>
+</ul>
+<h2 id="dynamics">Dynamics</h2>
+<p>The needle movement can be approximated using the following formula:
+<code>display = old +/- (e ^ (new - old) - 1) * rise/decay</code>. The
+rise or decay factor limits how far the needle can move per frame or
+iteration of the calculation.</p>
+<p>The needle position, frame number in foobar2000 <code>.bin</code>
+panels or angle in AIMP analog <code>.zip</code> skins, is calculated
+using the point-slope equation referenced to the zero dB frame or angle.
+For the AIMP LED <code>.zip</code> skins, the "light" fill is calculated
+by interpolating between the points in the <code>dbs</code> parameter's
+array using Catmull-Rom splines.</p>
+<h3 id="needle-behavior-derivation-methodology">Needle Behavior
+Derivation Methodology</h3>
+<p>Used a circuit of a stereo VU meter, tracing the PCB and translating
+all the component values of the driving circuit into a SPICE netlist.
+The netlist was simulated to get the step/transient and impulse
+responses of the "system." Since the VU meter face plate is logarithmic,
+the circuit uses analog differentiator, integrator and summer circuits.
+To validate the netlist simulation correctness, various points of the
+working circuit were probed with an oscilloscope.</p>
+<p>With the characteristics of the driving circuit in hand, turned
+attention to the needle. The needle can be modeled as a
+mass-spring-damper system. So, setting up the ODE for the system (with
+some minor guesses) provides the behavior characteristics of the needle.
+This is a common second-order system with known roots.</p>
+<p>The needle was set up underdamped and simulated/"animated" as a PID
+controller (see <a
+href="http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/">this
+series</a> for additional insights). The PID coefficients were derived
+from the transient and impulse response targets of the SPICE simulation
+as those come from the voltage levels (closest to the visualization
+audio levels provided by foobar2000). The actual PID coefficients are
+simplified into higher level abstractions that are called "rise" and
+"decay"--where the larger numbers means faster. And also "jitter" which
+is a control on the minimum increment to the error accumulator.</p>
+<p>This methodology only provides an approximate model of the analog
+behavior of the needle in a discrete simulation. Although the derivation
+was detailed, the needle movement of this component is not and will
+never be an accurate duplicate to its real-world analog. However, using
+the tuning knobs provided along time and experimentation it should be
+possible to create a pleasing ballistic needle movement.</p>
+<h2 id="bin-file-specification"><code>.bin</code> File
+Specification</h2>
+<pre class="text"><code>Panel Specification
+===================
+
+Reverse Engineer: Jimmy Cassis
+Date: 2024-10-01
+
+This specification defines the format of the BIN file.
+
+Panel File Format
+-----------------
+
+The files in this format use &quot;.bin&quot; extension.
+
+The panel file begins with a header.
+
+The panel file format layout:
+
+Offset     Size    Description
+
+  0          2     Bitmap width (16-bit unsigned integer, little-endian), between 2 and 4096
+  2          2     Bitmap height (16-bit unsigned integer, little-endian), between 2 and 4096
+  4          2     Frame count (16-bit unsigned integer, little-endian), between 2 and 1024
+  6          2     Zero dB frame (16-bit unsigned integer, little-endian), between 0 and 1024
+  8          n     Needle delta offset list (array of 32-bit unsigned integer offsets, little-endian), `n` is &quot;frames * 4&quot; and the first entry must be greater than or equal to 32; note that some offsets might be repeated due to the &quot;knots&quot; interpolation.
+  8+n        p     Background image bitmap pixel array (BI_RGB format [B8G8R8A8 UNORM], 32 bits per pixel, little-endian), `p` is &quot;width * height * 4&quot;, format below
+  8+n+p      l     Optional, lamp delta offset list (array of 32-bit unsigned integer offsets, little-endian), `l` is &quot;frames * 4&quot;
+  8+n+p+l    d     Needle delta arrays (variable size, offsets are big-endian, deltas are BI_RGB and apply per channel), `d` is variable, format below
+  8+n+p+l+d  a     Optional, lamp delta arrays (variable size, offsets are big-endian, deltas are BI_RGB and apply per channel), `a` is variable, format below
+
+The total size of the file is: 8+n+p+l+d+a
+The total size of the file must be greater than: 8+n+p
+
+The bitmap pixel array layout is as follows (address _decreases_ from left-to-right) and arranged in top-down order:
+
+                     +-------------------------+-------------------------+-------------------------+-------------------------+
+Sample Length:       |            8            |            8            |            8            |            8            |
+Channel Membership:  |          Alpha          |           Red           |          Green          |           Blue          |
+Pixel Bits:          |  A  A  A  A  a  a  a  a |  R  R  R  R  r  r  r  r |  G  G  G  G  g  g  g  g |  B  B  B  B  b  b  b  b |
+Bit Number:          | 31 30 29 28 27 26 25 24 | 23 22 21 20 19 18 17 16 | 15 14 13 12 11 10  9  8 |  7  6  5  4  3  2  1  0 |
+                     +-------------------------+-------------------------+-------------------------+-------------------------+
+                      ^                         ^
+                      |                         |
+                      |                         + less significant byte
+                      + more significant byte
+
+The needle and lamp delta arrays use the following format:
+
+- For every frame there is a 2-byte big-endian offset while the most significant bit (MSB) of the even byte is unset.
+- If the MSB for the even byte is set, it indicates a count (excluding the MSB) of the number of pixel channels to override starting at the offset in the pixel array indicated by the sum of all the previous 2-byte offsets.
+  * Note that the offset might not necessarily start or end at a pixel boundary.
+- Repeat, calculating a new offset from the end of the final overriden pixel until the even byte MSB is set and the count is zero (0x80).
+
+Worked example for the needle delta array (address _increases_ from left-to-right):
+
+             +-----------------------------------+-----------------------+-----+-----------------------------------------------------------+-----+---------...---+
+Offset Sum:  |             174272                |           7           | 1489|                           19                              | 1481|     23  ...   |
+Offset:      |32768+32768+32768+32768+32768+10438| 7| 0| 1| 2| 3| 4| 5| 6| 1488|19| 0| 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|14|15|16|17|18| 1480|23| 0| 1|...| 0|
+Bytes:       |7F FF 7F FF 7F FF 7F FF 7F FF 28 BF 87 8A 8B 87 00 E0 E2 DE 05 D0 93 B1 B2 AE 00 69 6A 67 00 6B 6D 68 00 B8 B9 B6 00 E0 E2 DF 05 C8 97 E6 EE ... 80|
+Pixel Bits:  |^^ **                              |   Bb Gg Rr Aa Bb Gg Rr|     |   Bb Gg Rr Aa Bb Gg Rr Aa Bb Gg Rr Aa Bb Gg Rr Aa Bb Gg Rr|     |   Bb Gg ...End|
+             +-|--|------------------------------+-----------------------+-----+-----------------------------------------------------------+-----+---------...---+
+               |  |
+               |  + more significant byte
+               + less significant byte
+
+Notes
+-----
+
+When drawing, ignore the alpha channel.
+
+Extensions
+----------
+
+1. Separate Left and Right Panels
+
+  By default, the panel file represents both the left and the right panels.
+  If the file format is repeated at the end of the delta arrays, it is assumed that the first format corresponds to the left panel and the second format corresponds to the right panel.
+  The file formats can be concatenated uncompressed into one file. Alternatively, individually compressed files can be concatenated (keep the same compression scheme for both).
+  Another method to provide separate left and right panels is to provide a pair of files where the left panel file ends in `1.bin` and the right panel file in `2.bin`.
+
+2. Transparency (Alpha Channel)
+
+  By default, the alpha channel is ignored.
+  If the alpha channel is not to be ignored (BI_BITFIELDS format [B8G8R8A8 UNORM], 32 bits per pixel, little-endian), set bit 7 (the most significant bit) of the upper byte of the zero dB frame in the header.
+
+3. Bottom-up Background Bitmap Pixel Array.
+
+  By default, the bitmap pixel array is assumed to be in top-down order.
+  If the bitmap pixel array is arranged in bottom-up order instead of top-down order, set bit 6 of the upper byte of the zero dB frame in the header.</code></pre>
+<h4 id="additional-bin-notes">Additional <code>.bin</code> Notes</h4>
+<ul>
+<li>Can be bzip2-compressed (recommended), LZMA-compressed,
+Gzip-compressed, Zstandard-compressed, LZ4-compressed, Lzip-compressed,
+Brotli-compressed or uncompressed.</li>
+<li>Can use needles or lamps (LEDs), or both.</li>
+<li>Can contain a single meter for left and right channels or separate
+left and right meters. See Extension 1.</li>
+</ul>
+<blockquote>
+<p>Warning: Identifying LZMA-compressed heuristic is limited; especially
+if the skin was compressed outside of VUEditor. Therefore it is possible
+to confuse an uncompressed <code>.bin</code> file of any width less than
+225 with a LZMA-uncompressed one. Using a bzip2-compressed file
+mitigates this issue since this scheme starts with an easily
+identifiable magic number.</p>
+</blockquote>
+<h2 id="aimp-analog-zip-specification">AIMP Analog <code>.zip</code>
+Specification</h2>
+<ul>
+<li>Must be ZIP-compressed and contain a <code>skin.ini</code> alongside
+corresponding PNG images at the root of the archive.</li>
+<li>Can contain a single panel for left and right channels or separate
+left and right panels.</li>
+<li>For single panel the images must be named <code>0.png</code>
+(background), <code>1.png</code> (needle), <code>2.png</code> (glass)
+with optional <code>3.png</code> (LED) and <code>bg.png</code>
+(wallpaper).</li>
+<li>For single panel all parameters must be specified under the
+<code>VU</code> section in the <code>skin.ini</code> file; the supported
+parameters are <code>MinAngle</code>, <code>MinLevel</code>,
+<code>ZeroAngle</code>, <code>ZeroLevel</code>, <code>MaxAngle</code>,
+<code>MaxLevel</code>, <code>PivotPointX</code>,
+<code>PivotPointY</code>, <code>MobilityNegative</code>,
+<code>MobilityPositive</code>, <code>orientation</code>, and
+<code>dbs</code>. The section and parameter names are case
+insensitive.</li>
+<li>For separate left and right panels the left panel images must be
+named <code>l_0.png</code> (background), <code>l_1.png</code> (needle),
+<code>l_2.png</code> (glass) with optional <code>l_3.png</code> (LED)
+and the right panel images must be named <code>r_0.png</code>
+(background), <code>r_1.png</code> (needle), <code>r_2.png</code>
+(glass) with optional <code>r_3.png</code> (LED). There can be an
+optional <code>bg.png</code> (wallpaper). The image names are case
+insensitive.</li>
+<li>For separate left and right panels, the left panel parameters must
+be specified in the <code>skin.ini</code> file under the
+<code>VU_L</code> section and the right panel parameters must be
+specified under the <code>VU_R</code> section. The supported parameters
+are the same as the single panel ones.</li>
+</ul>
+<blockquote>
+<p>Note 1: <code>MobilityNegative</code>, <code>MobilityPositive</code>,
+and <code>orientation</code> parameters are currently unused.</p>
+</blockquote>
+<blockquote>
+<p>Note 2: The <code>dbs</code> parameter array is optional and only
+used in skins that include an LED component in addition to the needle.
+As noted previously, the LED image is <code>{l_,r_,}3.png</code>.</p>
+</blockquote>
+<blockquote>
+<p>Note 3: Missing parameters are assumed to be 0 or false.</p>
+</blockquote>
+<h2 id="aimp-led-zip-specification-lvu">AIMP LED <code>.zip</code>
+Specification (LVU)</h2>
+<ul>
+<li>Must be ZIP-compressed and contain a <code>settings.ini</code>
+alongside corresponding PNG images at the root of the archive.</li>
+<li>The left panel parameters must be specified in the
+<code>settings.ini</code> file under the <code>left</code> section and
+the right panel parameters must be specified under the
+<code>right</code> section. The background must be specified in the
+<code>bg</code> section. The supported parameter in all 3 sections is
+<code>png</code>. The supported parameters in the <code>left</code> and
+<code>right</code> sections are <code>orientation</code>,
+<code>start_point</code>, <code>finish_point</code>, <code>pos_x</code>,
+<code>pos_y</code>, and <code>dbs</code>.</li>
+<li>The <code>dbs</code> image "dimension" can increase or decrease with
+the decibel level depending on whether the LED image is covered or
+uncovered.</li>
+<li>An <code>orientation</code> value of 0 specifies that the
+<code>dbs</code> dimension refers to width (i.e., horizontal).
+Conversely a value of 1 refers to height as the value that changes with
+the level (i.e., vertical).</li>
+<li>The image name must match the one given in by the <code>png</code>
+parameter for each section.</li>
+</ul>
+<h2 id="foobar2000-rar-specification">foobar2000 <code>.rar</code>
+Specification</h2>
+<ul>
+<li>Must be RAR-compressed and contain a
+<code>&lt;filename&gt;.bin</code> file alongside an optional
+<code>&lt;filename&gt;.ini</code> file. Where
+<code>&lt;filename&gt;</code> must exactly match the name used as the
+base name of <code>&lt;filename&gt;.rar</code>. Further, these files
+must be placed in the root of the archive.</li>
+<li>The
+<code>&lt;filename&gt;1.bin</code>/<code>&lt;filename&gt;2.bin</code>
+naming pattern (with or without space between file name root and number)
+is also supported for individual L/R panels.</li>
+<li>The <code>.bin</code> file(s) contained in the archive must follow
+the <code>.bin</code> file specification outlined above and compressed,
+if desired, using a supported format.</li>
+<li>All customization parameters must be specified under the
+<code>DEFAULT</code> section in the <code>&lt;filename&gt;.ini</code>
+file; the supported parameters are <code>fall</code>, <code>rise</code>,
+<code>singleMeter</code>, <code>peakLED</code>, <code>isVertical</code>,
+<code>curveAdj</code>, and <code>bgColour</code>. The section and
+parameter names are case insensitive.</li>
+</ul>
+<blockquote>
+<p>Note 1: <code>fall</code> and <code>rise</code> parameters are
+currently unused.</p>
+</blockquote>
+<blockquote>
+<p>Note 2: The <code>peakLED</code> parameter being true sets <em>Levels
+to _Mixed</em> as soon as the panel is loaded. The
+<code>singleMeter</code> and <code>isVertical</code> parameters combine
+to set the <em>Layout</em> mode. The <code>bgColour</code> parameter
+sets the background color, overriding the edge color detection. The
+<code>curveAdj</code> parameter flattens the logarithmic curve by
+affecting the quadratic parameter.</p>
+</blockquote>
+<blockquote>
+<p>Note 3: Missing parameters are assumed to be 0 or false.</p>
+</blockquote>
+<h3 id="standalone-ini-file">Standalone <code>.ini</code> File</h3>
+<ul>
+<li>Similar to the <code>.rar</code> specification, except that
+<code>&lt;filename&gt;.bin</code> and <code>&lt;filename&gt;.ini</code>
+are not archived together.</li>
+<li><code>&lt;filename&gt;.bin</code> and
+<code>&lt;filename&gt;.ini</code> must live in the same folder.</li>
+</ul>
+<h2 id="com-interface-specification">COM Interface Specification</h2>
+<p>The component exposes COM interfaces for automation. The
+<code>IVUMeter</code> and <code>IVUMeterWindow</code> COM interfaces for
+managing and interacting with the foobar2000 VU Meter component. In
+foobar2000, these interfaces are mainly accessed through JavaScript.</p>
+<h3 id="functions">Functions</h3>
+<h4 id="com_get_interface"><code>com_get_interface</code></h4>
+<p>Retrieves a <code>IVUMeter</code> interface instance.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">extern</span> <span class="st">&quot;C&quot;</span> <span class="ex">__declspec(dllimport) HRESULT __cdecl com_get_interface(IVUMeter** pp);</span></span></code></pre></div>
+<h3 id="enums">Enums</h3>
+<h4 id="layoutenum"><code>LayoutEnum</code></h4>
+<p>Defines the layout options for the VU Meter window.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>BothH</td>
+<td>Both channels, horizontal</td>
+</tr>
+<tr>
+<td>1</td>
+<td>BothV</td>
+<td>Both channels, vertical</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Left</td>
+<td>Left channel only</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Right</td>
+<td>Right channel only</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Mono</td>
+<td>Mono layout</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interfaces">Interfaces</h3>
+<h4 id="ivumeter"><code>IVUMeter</code></h4>
+<p>Provides control and status for the VU Meter component.</p>
+<p><strong>IID:</strong>
+<code>{9EBE6FDE-502B-4571-922F-5D5942A53638}</code></p>
+<h5 id="properties">Properties</h5>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Returns (get) / Accepts (put)</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ComponentVersion</code></td>
+<td><code>UINT</code>; get</td>
+<td>Gets component's version number.</td>
+</tr>
+<tr>
+<td><code>ComponentVersionText</code></td>
+<td><code>BSTR</code>; get</td>
+<td>Gets component's version as text.</td>
+</tr>
+<tr>
+<td><code>LeftLevel</code></td>
+<td><code>FLOAT</code>; get</td>
+<td>Gets left channel RMS level.</td>
+</tr>
+<tr>
+<td><code>RightLevel</code></td>
+<td><code>FLOAT</code>; get</td>
+<td>Gets right channel RMS level.</td>
+</tr>
+<tr>
+<td><code>LeftPeak</code></td>
+<td><code>FLOAT</code>; get</td>
+<td>Gets left channel peak level.</td>
+</tr>
+<tr>
+<td><code>RightPeak</code></td>
+<td><code>FLOAT</code>; get</td>
+<td>Gets right channel peak level.</td>
+</tr>
+<tr>
+<td><code>Offset</code></td>
+<td><code>DOUBLE</code>; get, put</td>
+<td>Gets or sets gain offset value.</td>
+</tr>
+<tr>
+<td><code>UpdatePeriod</code></td>
+<td><code>DOUBLE</code>; get</td>
+<td>Gets update window period.</td>
+</tr>
+<tr>
+<td><code>DownmixChannels</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets downmix state.</td>
+</tr>
+<tr>
+<td><code>RoundCorners</code></td>
+<td><code>FLOAT</code>; get, put</td>
+<td>Gets or sets corner rounding.</td>
+</tr>
+<tr>
+<td><code>CubicInterpolation</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets cubic interpolation state.</td>
+</tr>
+<tr>
+<td><code>DisableTuning</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets tuning disable state.</td>
+</tr>
+<tr>
+<td><code>DisallowFullscreen</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets fullscreen restriction state.</td>
+</tr>
+<tr>
+<td><code>MultiMonFullscreen</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets multi-monitor fullscreen state.</td>
+</tr>
+<tr>
+<td><code>RemoveBackground</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets background removal state.</td>
+</tr>
+<tr>
+<td><code>EnableTransparency</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets transparency state.</td>
+</tr>
+<tr>
+<td><code>IgnoreDefaults</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets "ignore defaults" state.</td>
+</tr>
+<tr>
+<td><code>Freeze</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets freeze state.</td>
+</tr>
+<tr>
+<td><code>ShowCounter</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets FPS counter visibility.</td>
+</tr>
+<tr>
+<td><code>ScreensaverMode</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets screensaver mode state.</td>
+</tr>
+<tr>
+<td><code>VSync</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets (<em>no effect</em>) VSync state.</td>
+</tr>
+<tr>
+<td><code>WindowID</code></td>
+<td><code>UINT</code>; get</td>
+<td>Gets current active window ID. Returns -1 if there is no active
+window.</td>
+</tr>
+<tr>
+<td><code>WindowCount</code></td>
+<td><code>UINT</code>; get</td>
+<td>Gets total window count.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="functions-1">Functions</h5>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Print(BSTR* Text)</code></td>
+<td>None</td>
+<td>Prints text to the foobar2000 console.</td>
+</tr>
+<tr>
+<td><code>Rescan()</code></td>
+<td>None</td>
+<td>Rescans <code>vumeter</code> folder.</td>
+</tr>
+<tr>
+<td><code>Defaults()</code></td>
+<td>None</td>
+<td>Restores defaults.</td>
+</tr>
+<tr>
+<td><code>CreateWindow(UINT ID)</code></td>
+<td><code>IVUMeterWindow**</code></td>
+<td>Creates VUMeterWindow interface for the window using ID.</td>
+</tr>
+<tr>
+<td><code>RegisterWindow(UINT ID)</code></td>
+<td>None</td>
+<td>Sets window using ID as active.</td>
+</tr>
+<tr>
+<td><code>RegisterRect(UINT ID, INT Left, INT Top, INT Width, INT Height)</code></td>
+<td>None</td>
+<td>Registers a rectangle region -- <em>no effect</em>.</td>
+</tr>
+</tbody>
+</table>
+<h4
+id="----------------------------------------------------------------------------------------"><strong>/----------------------------------------------------------------------------------------/</strong></h4>
+<h4 id="ivumeterwindow"><code>IVUMeterWindow</code></h4>
+<p>Represents a VU Meter window instance with properties for visibility,
+layout, and skin/panel configuration.</p>
+<p><strong>IID:</strong>
+<code>{482C5F92-2D21-4F6F-9857-87C1D2C04344}</code></p>
+<h5 id="properties-1">Properties</h5>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns (get) / Accepts (put)</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Visible</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets (<em>no effect</em>) window visibility state.</td>
+</tr>
+<tr>
+<td><code>Enabled</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets (<em>no effect</em>) window enabled state.</td>
+</tr>
+<tr>
+<td><code>Layout</code></td>
+<td><code>LayoutEnum</code>; get, put</td>
+<td>Gets or sets current layout.</td>
+</tr>
+<tr>
+<td><code>LockAspectRatio</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets aspect ratio lock state.</td>
+</tr>
+<tr>
+<td><code>SkinName</code></td>
+<td><code>BSTR</code>; get, put</td>
+<td>Gets current skin name or changes skin.</td>
+</tr>
+<tr>
+<td><code>GroupName</code></td>
+<td><code>BSTR</code>; get, put</td>
+<td>Gets current group name or changes skin to first one in group.</td>
+</tr>
+<tr>
+<td><code>GroupCount</code></td>
+<td><code>UINT</code>; get</td>
+<td>Gets number of groups (directories).</td>
+</tr>
+<tr>
+<td><code>SkinCount</code></td>
+<td><code>UINT</code>; get</td>
+<td>Gets number of skins in group of currently-selected skin.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="functions-2">Functions</h5>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetBounds(int Left, int Top, int Width, int Height)</code></td>
+<td>None</td>
+<td>Sets window position and size -- <em>no effect</em>.</td>
+</tr>
+<tr>
+<td><code>SetConfig(BSTR GroupName, BSTR SkinName, LayoutEnum Layout)</code></td>
+<td>None</td>
+<td>Changes skin and layout.</td>
+</tr>
+<tr>
+<td><code>LoadSkin(BSTR GroupName, BSTR SkinName)</code></td>
+<td>None</td>
+<td>Changes skin.</td>
+</tr>
+<tr>
+<td><code>LoadPrevSkin(BSTR GroupName)</code></td>
+<td>None</td>
+<td>Loads previous skin in group (does not wrap around).</td>
+</tr>
+<tr>
+<td><code>LoadNextSkin(BSTR GroupName)</code></td>
+<td>None</td>
+<td>Loads next skin in group (does not wrap around).</td>
+</tr>
+<tr>
+<td><code>GroupSize(UINT Index)</code></td>
+<td><code>UINT</code></td>
+<td>Gets size of a group by index.</td>
+</tr>
+<tr>
+<td><code>Groups(UINT Index)</code></td>
+<td><code>BSTR</code></td>
+<td>Gets group name by index.</td>
+</tr>
+<tr>
+<td><code>Skins(UINT Index)</code></td>
+<td><code>BSTR</code></td>
+<td>Gets skin name by index in group.</td>
+</tr>
+<tr>
+<td><code>Skin(UINT Group, UINT Index)</code></td>
+<td><code>BSTR</code></td>
+<td>Gets skin name by group index and skin index.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

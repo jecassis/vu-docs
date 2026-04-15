@@ -1,0 +1,279 @@
+:root {
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --muted: #5b6472;
+  --link: #005cc5;
+  --border: #e5e7eb;
+  --code-bg: #f3f4f6;
+  --accent: #0f766e;
+  --maxw: 860px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #f5f7fb 0%, #f8f9fb 220px, #f8f9fb 100%);
+  color: var(--text);
+  font-family: 'Source Serif 4', 'Georgia', serif;
+  line-height: 1.65;
+}
+
+body {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2.25rem 1.25rem 4rem;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  line-height: 1.25;
+  color: #0f172a;
+  letter-spacing: 0.01em;
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+h1 {
+  font-size: 2.15rem;
+  margin-top: 0.5rem;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.45rem;
+}
+
+h2 {
+  font-size: 1.55rem;
+  border-left: 4px solid var(--accent);
+  padding-left: 0.6rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+p,
+li {
+  font-size: 1.03rem;
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+a:hover {
+  text-decoration-thickness: 2.5px;
+}
+
+blockquote {
+  margin: 1rem 0;
+  padding: 0.6rem 1rem;
+  background: #f0fdfa;
+  border-left: 4px solid var(--accent);
+  color: #134e4a;
+}
+
+pre,
+code {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 0.92em;
+}
+
+code {
+  background: var(--code-bg);
+  padding: 0.14rem 0.3rem;
+  border-radius: 0.3rem;
+}
+
+pre {
+  background: #111827;
+  color: #f8fafc;
+  padding: 0.9rem 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  border: 1px solid #334155;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+/* Override Pandoc's default token colors for better contrast on dark blocks. */
+div.sourceCode pre,
+pre.sourceCode,
+pre > code.sourceCode {
+  color: #f8fafc;
+}
+
+pre > code.sourceCode > span,
+code.sourceCode > span {
+  color: #f8fafc;
+}
+
+code span.co,
+code span.an,
+code span.in,
+code span.do,
+code span.wa,
+code span.cv {
+  color: #93c5fd;
+}
+
+code span.kw,
+code span.cf,
+code span.ot,
+code span.im,
+code span.op {
+  color: #f9a8d4;
+}
+
+code span.fu,
+code span.at,
+code span.bu {
+  color: #34d399;
+}
+
+code span.st,
+code span.ch,
+code span.ss,
+code span.vs {
+  color: #fde68a;
+}
+
+code span.dv,
+code span.fl,
+code span.bn,
+code span.sc,
+code span.cn {
+  color: #fca5a5;
+}
+
+code span.va,
+code span.dt,
+code span.pp,
+code span.ex {
+  color: #c4b5fd;
+}
+
+code span.er,
+code span.al {
+  color: #fecaca;
+  font-weight: 700;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.3rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.65rem;
+  vertical-align: top;
+}
+
+th {
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  background: #f3f4f6;
+  text-align: left;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.35rem;
+}
+
+nav#TOC {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+nav#TOC ul {
+  margin: 0.4rem 0 0.2rem 1rem;
+}
+
+.doc-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 0 0 1.1rem;
+  padding: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
+}
+
+.doc-nav a {
+  display: inline-block;
+  text-decoration: none;
+  color: #0b4f88;
+  border: 1px solid #cfd8e3;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 0.24rem 0.68rem;
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  font-size: 0.9rem;
+}
+
+.doc-nav a:hover {
+  border-color: #9fb6d1;
+  background: #f7fbff;
+}
+
+.doc-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.doc-footer a {
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  padding: 0.4rem 0.8rem;
+  background: var(--surface);
+}
+
+.doc-footer a:hover {
+  border-color: #b7c2d0;
+  background: #f7fafc;
+}
+
+@media (max-width: 760px) {
+  body {
+    padding: 1.1rem 0.9rem 2.5rem;
+  }
+  .doc-nav {
+    gap: 0.45rem;
+    padding: 0.55rem;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+  h2 {
+    font-size: 1.35rem;
+  }
+}
