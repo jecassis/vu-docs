@@ -125,6 +125,15 @@ Wheel, Button 4 and Button 5</a></li>
 <li><a href="#screenshot" id="toc-screenshot">Screenshot</a></li>
 <li><a href="#keyboard-shortcuts" id="toc-keyboard-shortcuts">Keyboard
 Shortcuts</a></li>
+<li><a href="#running-foobar2000-under-proton"
+id="toc-running-foobar2000-under-proton">Running foobar2000 under
+Proton</a></li>
+<li><a href="#fonts-under-wine-and-proton"
+id="toc-fonts-under-wine-and-proton">Fonts under Wine and
+Proton</a></li>
+<li><a href="#window-scaling-under-wine-and-proton"
+id="toc-window-scaling-under-wine-and-proton">Window Scaling under Wine
+and Proton</a></li>
 <li><a href="#dynamics" id="toc-dynamics">Dynamics</a>
 <ul>
 <li><a href="#needle-behavior-derivation-methodology"
@@ -142,17 +151,36 @@ id="toc-aimp-led-zip-specification-lvu">AIMP LED <code>.zip</code>
 Specification (LVU)</a></li>
 <li><a href="#foobar2000-rar-specification"
 id="toc-foobar2000-rar-specification">foobar2000 <code>.rar</code>
-Specification</a>
-<ul>
+Specification</a></li>
+<li><a href="#foobar2000-7z-specification"
+id="toc-foobar2000-7z-specification">foobar2000 <code>.7z</code>
+Specification</a></li>
 <li><a href="#standalone-ini-file"
 id="toc-standalone-ini-file">Standalone <code>.ini</code> File</a></li>
-</ul></li>
 <li><a href="#com-interface-specification"
 id="toc-com-interface-specification">COM Interface Specification</a>
 <ul>
 <li><a href="#functions" id="toc-functions">Functions</a></li>
 <li><a href="#enums" id="toc-enums">Enums</a></li>
 <li><a href="#interfaces" id="toc-interfaces">Interfaces</a></li>
+</ul></li>
+<li><a href="#configuration-guids"
+id="toc-configuration-guids">Configuration GUIDs</a>
+<ul>
+<li><a href="#component-registration"
+id="toc-component-registration">Component Registration</a></li>
+<li><a href="#settings-controlled-in-preferences-page"
+id="toc-settings-controlled-in-preferences-page">Settings Controlled in
+Preferences Page</a></li>
+<li><a href="#settings-controlled-in-advanced-preferences"
+id="toc-settings-controlled-in-advanced-preferences">Settings Controlled
+in Advanced Preferences</a></li>
+<li><a href="#options-showing-in-main-menu"
+id="toc-options-showing-in-main-menu">Options Showing in Main
+Menu</a></li>
+<li><a href="#state-settings-saved-on-close-and-restored-on-launch"
+id="toc-state-settings-saved-on-close-and-restored-on-launch">State
+Settings Saved on Close and Restored on Launch</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -170,8 +198,9 @@ DirectX 11 under Wine.</p>
 instead which omits some DirectX 12 features.</li>
 </ul></li>
 <li>Supports VUEditor-generated <code>.bin</code> files. Refer to the
-"<code>.bin</code> File Specification" and "foobar2000 <code>.rar</code>
-Specification" sections below.</li>
+"<code>.bin</code> File Specification", "foobar2000 <code>.rar</code>
+Specification" and "foobar2000 <code>.7z</code> Specification" sections
+below.</li>
 <li>Supports AIMP analog <code>.zip</code> skins. Refer to the "AIMP
 Analog <code>.zip</code> Specification" below.</li>
 <li>Supports AIMP LED <code>.zip</code> skins. Refer to the "AIMP LED
@@ -190,9 +219,15 @@ ARM64EC.</li>
 <ul>
 <li>Tested on foobar2000 2.25.10 (x86 64-bit) and Microsoft Windows 11
 (Build 26200).</li>
-<li>Tested under Proton Experimental (Wine 11.0) on a machine running
-SteamOS 3.8 (Mesa/RADV), with Direct3D 11 via DXVK at feature level
-11_1.</li>
+<li>Tested with foobar2000 v2.25.10 (x64) under Proton Experimental
+(experimental-11.0-20260713 -- Wine 11.0):
+<ul>
+<li>Direct3D 11 via DXVK v3.0.1, HLSL compiled through vkd3d, running at
+Direct3D feature level 11_1.</li>
+<li>Vulkan 1.4.350 on Mesa/RADV 26.1.99.</li>
+<li>Verification machine: AMD Navi 33 (RDNA 3) GPU on SteamOS 3.8.24
+(build 20260716.2, kernel 6.16.12-valve).</li>
+</ul></li>
 <li>Built for foobar2000 2.0 and later (2025-03-07) with latest Windows
 11 SDK (10.0.28000.2114) and MSVC (14.51).</li>
 </ul>
@@ -404,20 +439,26 @@ Default is 60 and the range is [24.0, 60.0] in unit steps.</li>
 the skin image size. Can also be set to enabled or disabled from the
 "Options" menu. Default is 16 and the range is [0.0, 32.0] in steps of
 1.6.</li>
-<li><em>Timeout</em>: sets the background window request message timeout
-in milliseconds during transparency. Default is 250 and the range is
-[15.0, 1000.0] in unit steps.</li>
 </ul>
+<!--- _Timeout_: sets the background window request message timeout in milliseconds during transparency. Default is 250 and the range is [15.0, 1000.0] in unit steps.-->
+
 <p><em>Options</em>:</p>
 <ul>
 <li><em>Downmix Channels</em>: instructs foobar2000 to combine all
 channels into one. This occurs in the player <strong>before</strong> any
 of this component's processing. It is disabled by default.</li>
+<li><em>Automatic Gain Control</em>: automatically adjusts the metered
+level toward the 0 VU reference so quiet or loud material sits around
+the mark. It is disabled by default.</li>
+<li><em>Needle Correction</em>: applies a needle-to-frame linearity
+correction for panels/skins whose frames are not linearly spaced,
+improving needle accuracy. It is enabled by default.</li>
 <li><em>Rounded Corners</em>: sets the corner tuning option to 0.0
 (unchecked) or 16.0 (checked and default).</li>
-<li><em>Cubic Interpolation</em>: selects between high quality cubic
-(enabled and default) and linear (disabled) Direct2D interpolation
-modes.</li>
+</ul>
+<!--- _Cubic Interpolation_: selects between high quality cubic (enabled and default) and linear (disabled) Direct2D interpolation modes. **Option removed.**-->
+
+<ul>
 <li><em>Disable Tuning</em>: disables the tuning menu and makes the
 component ignore the mouse wheel. The tuning menu is enabled by
 default.</li>
@@ -437,9 +478,9 @@ noticeable during windowing events such as resizing. As such it is
 disabled by default.</li>
 <li><em>Ignore Defaults</em>: ignores the defaults set in
 <code>.ini</code> files that may accompany the <code>.bin</code> files,
-both loose and archived in <code>.rar</code>, and disables automatic
-layout selection from filename layout suffixes. Defaults are not ignored
-by default.</li>
+both loose and archived in <code>.rar</code> or <code>.7z</code>, and
+disables automatic layout selection from filename layout suffixes.
+Defaults are not ignored by default.</li>
 <li><em>Equivalent Pause and Stop</em>: makes pausing and stopping
 equivalent. By default, when disabled and paused, simulation state is
 held. When enabled, regardless of whether paused or stopped, the
@@ -534,8 +575,9 @@ these will also close the dialog box.</li>
 <li>Clicking "Reset" will revert all options to their default values
 (exactly equivalent to the reset option in the context menu).</li>
 <li>Clicking "Font" will open a font selection dialog for customizing
-the FPS counter text properties (family, style, size, weight, and
-color). The dialog shows a live preview.</li>
+the FPS counter text properties (family, style, size, weight, color, and
+opacity). The dialog shows a live preview. The counter text defaults to
+opaque white.</li>
 <li>Clicking "OK" will keep the changes and close the dialog box.</li>
 <li>All combos, buttons, sliders and edit boxes include tooltips and are
 tab stops.</li>
@@ -559,6 +601,10 @@ dark mode selection in foobar2000.</li>
 affects the instance where the dialog was launched.</li>
 <li>The sliders have their loudest setting (0 dB) at the top and their
 quietest (-12 dB) at the bottom.</li>
+<li>While audio is playing, each slider's thumb is colored to indicate
+whether that channel carries signal in the current track: green when the
+channel is present and gold/amber when it is absent. When nothing is
+playing, the sliders use the default theme thumb.</li>
 <li>The color box will only appear for <code>.bin</code> panels. It
 contains the edge-sampled RGB hexadecimal background color. It can be
 changed to any other valid color, overriding the automatically-sampled
@@ -585,7 +631,7 @@ dB].</li>
 </ul>
 <h2 id="layout-suffix">Layout Suffix</h2>
 <p>Skin filenames can include a layout suffix using the pattern
-<code>{N}</code> where <code>N</code> is a number from 0 to 4
+<code>N</code> where <code>N</code> is a number from 0 to 4
 corresponding to the layout modes (0 = Left+Right H, 1 = Left+Right V, 2
 = Left, 3 = Right, 4 = Mono). When a skin with a layout suffix is
 loaded, the layout is automatically set to the specified mode. The
@@ -624,12 +670,103 @@ mode.</li>
 <li><code>Delete</code>: clears all text in text entry mode.</li>
 <li><code>Page Up</code> / <code>Page Down</code>: changes the texture
 in teapot mode.</li>
-<li>Konami Code
-(<code>Up Up Down Down Left Right Left Right B A</code>): activates the
-teapot easter egg.</li>
-<li>Doom cheat code (<code>I D D Q D</code>): activates the text entry
-easter egg.</li>
 </ul>
+<!--- Konami Code (`Up Up Down Down Left Right Left Right B A`): activates the teapot easter egg.-->
+
+<!--- Doom cheat code (`I D D Q D`): activates the text entry easter egg.-->
+
+<h2 id="running-foobar2000-under-proton">Running foobar2000 under
+Proton</h2>
+<p>When foobar2000 is installed as a non-Steam title, it can be launched
+against its Proton prefix directly from the command line. Replace
+<code>&lt;id&gt;</code> with the app's <code>compatdata</code>
+identifier and adjust the Proton build path if you use a different
+Proton version.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">STEAM_COMPAT_DATA_PATH</span><span class="op">=</span><span class="st">&quot;/home/deck/.steam/steam/steamapps/compatdata/&lt;id&gt;&quot;</span> <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">STEAM_COMPAT_CLIENT_INSTALL_PATH</span><span class="op">=</span><span class="st">&quot;/home/deck/.steam/steam&quot;</span> <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;/home/deck/.steam/steam/steamapps/common/Proton - Experimental/proton&quot;</span> run <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;/home/deck/.steam/steam/steamapps/compatdata/&lt;id&gt;/pfx/drive_c/users/steamuser/foobar2000/foobar2000.exe&quot;</span></span></code></pre></div>
+<ul>
+<li><code>STEAM_COMPAT_DATA_PATH</code> points at the app's
+<code>compatdata/&lt;id&gt;</code> directory; its <code>pfx</code>
+subfolder is the Wine prefix used for the fonts and scaling tweaks
+below.</li>
+<li><code>STEAM_COMPAT_CLIENT_INSTALL_PATH</code> points at the Steam
+installation root.</li>
+<li>The final argument is the path to <code>foobar2000.exe</code> inside
+the prefix.</li>
+</ul>
+<h2 id="fonts-under-wine-and-proton">Fonts under Wine and Proton</h2>
+<p>The dialogs and the on-screen frame counter request the "Segoe UI"
+font. Windows ships this font, but Wine and Proton do not, so they
+substitute a default sans-serif face (often Liberation Sans or the host
+desktop font). To restore a Segoe UI-like appearance, use one of the
+following approaches. In each case, restart foobar2000 afterward.</p>
+<ol type="1">
+<li><strong>Copy Segoe UI into the prefix (most faithful; requires a
+Windows license).</strong> Locate the Wine/Proton prefix foobar2000 runs
+in. For a Steam/Proton shortcut this is
+<code>~/.steam/steam/steamapps/compatdata/&lt;AppID&gt;/pfx</code>; for
+plain Wine it is <code>$WINEPREFIX</code> (default
+<code>~/.wine</code>). Copy the Segoe UI family
+(<code>segoeui.ttf</code>, <code>segoeuib.ttf</code>,
+<code>segoeuii.ttf</code>, <code>segoeuiz.ttf</code>,
+<code>segoeuil.ttf</code>, <code>seguisb.ttf</code>,
+<code>segoeuisl.ttf</code>, <code>seguibl.ttf</code> and their italics)
+from a licensed <code>C:\Windows\Fonts</code> into
+<code>&lt;prefix&gt;/drive_c/windows/Fonts/</code>.</li>
+<li><strong>Use Selawik (open, metric-compatible).</strong> Microsoft's
+MIT-licensed Selawik font is a drop-in, metric-compatible substitute for
+Segoe UI. Install <code>selawik*.ttf</code> into the prefix Fonts
+folder, then map the name: under the
+<code>HKEY_CURRENT_USER\Software\Wine\Fonts\Replacements</code> registry
+key, add a string value named <code>Segoe UI</code> with data
+<code>Selawik</code>.</li>
+<li><strong>Substitute a font already on the system.</strong> Using the
+same <code>Wine\Fonts\Replacements</code> key, map <code>Segoe UI</code>
+to a similar installed face such as <code>Open Sans</code>,
+<code>Noto Sans</code> or <code>Liberation Sans</code>.</li>
+</ol>
+<blockquote>
+<p>Note 1: The <code>Wine\Fonts\Replacements</code> key is also where to
+look for (and delete) an existing <code>Segoe UI</code> (and
+<code>Segoe UI Semibold</code>) mapping if a copied font is not being
+picked up. A stray mapping to a serif face such as
+<code>Times New Roman</code> is a common reason the dialogs render in a
+serif font even when Segoe UI is installed.</p>
+</blockquote>
+<blockquote>
+<p>Note 2: Copying Segoe UI from a licensed Windows installation for
+personal use is permitted; it may not be redistributed, which is why
+Selawik exists for bundling a prefix.</p>
+</blockquote>
+<h2 id="window-scaling-under-wine-and-proton">Window Scaling under Wine
+and Proton</h2>
+<p>If the dialogs render too small or too large under Wine or Proton,
+adjust the prefix's DPI. Scaling is controlled through
+<strong>winecfg</strong>.</p>
+<ol type="1">
+<li>Open winecfg for the prefix foobar2000 uses:
+<ul>
+<li>Plain Wine: <code>WINEPREFIX=&lt;prefix&gt; winecfg</code>.</li>
+<li>Winetricks GUI: run <code>winetricks</code>, select the prefix, then
+choose <strong>Run winecfg</strong>.</li>
+<li>Proton (Steam): run <code>protontricks</code>, select the prefix,
+then choose <strong>Run winecfg</strong>.</li>
+</ul></li>
+<li>In winecfg, open the <strong>Graphics</strong> tab and change the
+<strong>Screen resolution</strong> DPI value. 96 dpi is 100%; common
+steps are 120 (125%), 144 (150%) and 192 (200%). Higher values enlarge
+the entire UI - dialogs, fonts and the meter chrome; lower values shrink
+it.</li>
+<li>Click <strong>Apply</strong> / <strong>OK</strong>.</li>
+</ol>
+<blockquote>
+<p>Note: The DPI value is stored in the registry at
+<code>HKEY_CURRENT_USER\Control Panel\Desktop\LogPixels</code> (a
+decimal <code>REG_DWORD</code>, e.g. 120), which you can also set
+directly with <code>wine regedit</code> instead of winecfg.</p>
+</blockquote>
 <h2 id="dynamics">Dynamics</h2>
 <p>The needle movement can be approximated using the following formula:
 <code>display = old +/- (e ^ (new - old) - 1) * rise/decay</code>. The
@@ -763,8 +900,8 @@ Extensions
 <h4 id="additional-bin-notes">Additional <code>.bin</code> Notes</h4>
 <ul>
 <li>Can be bzip2-compressed (recommended), LZMA-compressed,
-Gzip-compressed, Zstandard-compressed, LZ4-compressed, Lzip-compressed,
-Brotli-compressed or uncompressed.</li>
+XZ-compressed (LZMA2), Gzip-compressed, Zstandard-compressed,
+LZ4-compressed, Lzip-compressed, Brotli-compressed or uncompressed.</li>
 <li>Can use needles or lamps (LEDs), or both.</li>
 <li>Can contain a single meter for left and right channels or separate
 left and right meters. See Extension 1.</li>
@@ -818,7 +955,7 @@ and <code>orientation</code> parameters are currently unused.</p>
 <blockquote>
 <p>Note 2: The <code>dbs</code> parameter array is optional and only
 used in skins that include an LED component in addition to the needle.
-As noted previously, the LED image is <code>{l_,r_,}3.png</code>.</p>
+As noted previously, the LED image is <code>l_,r_,3.png</code>.</p>
 </blockquote>
 <blockquote>
 <p>Note 3: Missing parameters are assumed to be 0 or false.</p>
@@ -886,11 +1023,34 @@ affecting the quadratic parameter.</p>
 <blockquote>
 <p>Note 3: Missing parameters are assumed to be 0 or false.</p>
 </blockquote>
-<h3 id="standalone-ini-file">Standalone <code>.ini</code> File</h3>
+<h2 id="foobar2000-7z-specification">foobar2000 <code>.7z</code>
+Specification</h2>
 <ul>
-<li>Similar to the <code>.rar</code> specification, except that
-<code>&lt;filename&gt;.bin</code> and <code>&lt;filename&gt;.ini</code>
-are not archived together.</li>
+<li>Must be 7z-compressed and follow the same layout and rules as the
+<code>.rar</code> specification above, except that the archive uses the
+<code>.7z</code> extension. It must contain a
+<code>&lt;filename&gt;.bin</code> file alongside an optional
+<code>&lt;filename&gt;.ini</code> file, where
+<code>&lt;filename&gt;</code> must exactly match the base name of
+<code>&lt;filename&gt;.7z</code>, and both files must be placed in the
+root of the archive.</li>
+<li>The
+<code>&lt;filename&gt;1.bin</code>/<code>&lt;filename&gt;2.bin</code>
+naming pattern (with or without space between file name root and number)
+is also supported for individual L/R panels.</li>
+<li>The <code>.bin</code> file(s) contained in the archive must follow
+the <code>.bin</code> file specification outlined above and compressed,
+if desired, using a supported format.</li>
+<li>All customization parameters must be specified under the
+<code>DEFAULT</code> section in the <code>&lt;filename&gt;.ini</code>
+file; the supported parameters and their notes are identical to those of
+the <code>.rar</code> specification.</li>
+</ul>
+<h2 id="standalone-ini-file">Standalone <code>.ini</code> File</h2>
+<ul>
+<li>Similar to the <code>.rar</code> and <code>.7z</code>
+specifications, except that <code>&lt;filename&gt;.bin</code> and
+<code>&lt;filename&gt;.ini</code> are not archived together.</li>
 <li><code>&lt;filename&gt;.bin</code> and
 <code>&lt;filename&gt;.ini</code> must live in the same folder.</li>
 </ul>
@@ -902,8 +1062,8 @@ foobar2000, these interfaces are mainly accessed through JavaScript.</p>
 <h3 id="functions">Functions</h3>
 <h4 id="com_get_interface"><code>com_get_interface</code></h4>
 <p>Retrieves a <code>IVUMeter</code> interface instance.</p>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">extern</span> <span class="st">&quot;C&quot;</span> <span class="ex">__declspec(dllimport) HRESULT __cdecl com_get_interface(IVUMeter** pp);</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">extern</span> <span class="st">&quot;C&quot;</span> <span class="ex">__declspec(dllimport) HRESULT __cdecl com_get_interface(IVUMeter** pp);</span></span></code></pre></div>
 <h3 id="enums">Enums</h3>
 <h4 id="layoutenum"><code>LayoutEnum</code></h4>
 <p>Defines the layout options for the VU Meter window.</p>
@@ -995,13 +1155,29 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#c
 </tr>
 <tr>
 <td><code>UpdatePeriod</code></td>
-<td><code>DOUBLE</code>; get</td>
-<td>Gets update window period.</td>
+<td><code>DOUBLE</code>; get, put</td>
+<td>Gets or sets update window period.</td>
+</tr>
+<tr>
+<td><code>BackgroundTimeout</code></td>
+<td><code>UINT</code>; get, put</td>
+<td>Gets or sets the transparent-background recapture interval
+(ms).</td>
 </tr>
 <tr>
 <td><code>DownmixChannels</code></td>
 <td><code>BOOL</code>; get, put</td>
 <td>Gets or sets downmix state.</td>
+</tr>
+<tr>
+<td><code>AutoGain</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets automatic gain control state.</td>
+</tr>
+<tr>
+<td><code>Correction</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets needle correction state.</td>
 </tr>
 <tr>
 <td><code>RoundCorners</code></td>
@@ -1011,7 +1187,8 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#c
 <tr>
 <td><code>CubicInterpolation</code></td>
 <td><code>BOOL</code>; get, put</td>
-<td>Gets or sets cubic interpolation state.</td>
+<td>Gets or sets cubic interpolation state (hidden; no menu
+option).</td>
 </tr>
 <tr>
 <td><code>DisableTuning</code></td>
@@ -1256,6 +1433,370 @@ layout, and skin/panel configuration.</p>
 <td><code>Skin(UINT Group, UINT Index)</code></td>
 <td><code>BSTR</code></td>
 <td>Gets skin name by group index and skin index.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="configuration-guids">Configuration GUIDs</h2>
+<p>The component identifies itself, its preferences, and every persisted
+setting to foobar2000 through fixed GUIDs. These are internal
+identifiers of interest primarily to developers and for troubleshooting
+configuration state.</p>
+<p>Entries marked <em>Reserved</em> are allocated but currently
+inactive; the GUIDs remain reserved so the identifiers are not reused.
+Type prefixes follow Hungarian notation: <code>sz</code> is a string,
+<code>b</code> is Boolean, and <code>n</code> is an integer.</p>
+<h3 id="component-registration">Component Registration</h3>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>GUID</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vumeter</code></td>
+<td><code>0A8B8B7A-2E90-43BB-B395-EB41A124F7E2</code></td>
+<td>Active</td>
+<td>Visualization UI element (component) class.</td>
+</tr>
+<tr>
+<td><code>vumeter_preferences</code></td>
+<td><code>F390D0B0-F19E-4FEA-A0D9-0DC0AC11A055</code></td>
+<td>Active</td>
+<td>Component preferences page.</td>
+</tr>
+<tr>
+<td><code>main_menu</code></td>
+<td><code>FE456D4A-7D11-4086-9869-6FBBDFDEB7F5</code></td>
+<td>Active</td>
+<td>Main menu group ("Analog VU Meter skins").</td>
+</tr>
+</tbody>
+</table>
+<h3 id="settings-controlled-in-preferences-page">Settings Controlled in
+Preferences Page</h3>
+<p>None. All persisted settings are exposed through the context menu,
+tuning/mixer dialogs, or advanced preferences rather than a dedicated
+preferences page.</p>
+<h3 id="settings-controlled-in-advanced-preferences">Settings Controlled
+in Advanced Preferences</h3>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>GUID</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>advconfig_branch</code></td>
+<td><code>3DBF6F5C-18BD-4E12-A018-A2C93FD40943</code></td>
+<td>Active</td>
+<td>Advanced preferences branch (tree node).</td>
+</tr>
+<tr>
+<td><code>cfg_bDebugOutput</code></td>
+<td><code>288048A7-F084-4C4F-ABBB-0204CE61E161</code></td>
+<td>Active</td>
+<td>Boolean; enables debug console output.</td>
+</tr>
+<tr>
+<td><code>cfg_szPanelsDir</code></td>
+<td><code>A409AF0E-3249-411C-9F43-10BFE1C1EAA3</code></td>
+<td>Active</td>
+<td>String; panels/skins directory override.</td>
+</tr>
+<tr>
+<td><code>cfg_szDegreelessness</code></td>
+<td><code>26C9437C-7A9B-4431-A3C6-E4D7381CA3B7</code></td>
+<td>Active</td>
+<td>String; hidden diagnostic setting.</td>
+</tr>
+<tr>
+<td><code>cfg_bMemoryOptimize</code></td>
+<td><code>908C4494-A58F-45B0-8853-98D977550B1E</code></td>
+<td>Active</td>
+<td>Boolean; memory optimization.</td>
+</tr>
+<tr>
+<td><code>cfg_bEnableCOM</code></td>
+<td><code>B3DB04F7-5E99-4AC0-8A9A-F7D4004AF872</code></td>
+<td>Active</td>
+<td>Boolean; enables COM automation.</td>
+</tr>
+<tr>
+<td><code>cfg_nRenderBackend</code></td>
+<td><code>C7A3F1E2-9B84-4D6A-BE12-3F5A9C0D7E48</code></td>
+<td>Active</td>
+<td>Integer; render backend selection (DX12/DX11).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="options-showing-in-main-menu">Options Showing in Main Menu</h3>
+<p>None.</p>
+<h3 id="state-settings-saved-on-close-and-restored-on-launch">State
+Settings Saved on Close and Restored on Launch</h3>
+<p>Controlled through the context menu or keyboard shortcuts.</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>GUID</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cfg_layout</code></td>
+<td><code>368B5693-7091-408A-A3C1-74FA0259AF9A</code></td>
+<td>Reserved</td>
+<td>Panel layout.</td>
+</tr>
+<tr>
+<td><code>cfg_lock_aspect_ratio</code></td>
+<td><code>86D87AC0-F34C-46BA-A50C-03E3FBD67D37</code></td>
+<td>Reserved</td>
+<td>Aspect ratio lock.</td>
+</tr>
+<tr>
+<td><code>cfg_mode</code></td>
+<td><code>7D098528-8D61-4CAD-807A-908C65B07A70</code></td>
+<td>Reserved</td>
+<td>Channel mode.</td>
+</tr>
+<tr>
+<td><code>cfg_level</code></td>
+<td><code>0705F80D-FF4E-4B7F-940D-0E0EC5B79E63</code></td>
+<td>Reserved</td>
+<td>Level metering method.</td>
+</tr>
+<tr>
+<td><code>cfg_tune</code></td>
+<td><code>06412F09-F77F-4861-A6AC-73B2029C357F</code></td>
+<td>Active</td>
+<td>Active mouse-wheel tuning mode.</td>
+</tr>
+<tr>
+<td><code>cfg_zero</code></td>
+<td><code>C8565C14-E384-45F2-99A1-3D0CC0F549B2</code></td>
+<td>Active</td>
+<td>Needle zero-frame offset.</td>
+</tr>
+<tr>
+<td><code>cfg_range</code></td>
+<td><code>5E21CED6-7E84-4109-B63D-16EA025ECDAD</code></td>
+<td>Active</td>
+<td>Needle range compression.</td>
+</tr>
+<tr>
+<td><code>cfg_decay</code></td>
+<td><code>2731521E-9ABB-4CD0-87CB-8D2050DB3EC3</code></td>
+<td>Active</td>
+<td>Needle decay factor.</td>
+</tr>
+<tr>
+<td><code>cfg_rise</code></td>
+<td><code>4E52E172-C866-405A-8916-6EC9AD496146</code></td>
+<td>Active</td>
+<td>Needle rise factor.</td>
+</tr>
+<tr>
+<td><code>cfg_jitter</code></td>
+<td><code>D769DF7E-CC47-4AAA-ACF4-BBF55E2C872B</code></td>
+<td>Active</td>
+<td>Movement jitter threshold.</td>
+</tr>
+<tr>
+<td><code>cfg_preamp_gain</code></td>
+<td><code>37EF1A37-F1C6-4C9D-9D44-98575AD3A732</code></td>
+<td>Active</td>
+<td>Preamp gain.</td>
+</tr>
+<tr>
+<td><code>cfg_auto_gain</code></td>
+<td><code>9A1F4B2C-7D3E-4C6A-B58F-2E9C10AD37B4</code></td>
+<td>Active</td>
+<td>Automatic gain control toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_correction</code></td>
+<td><code>7C2A9E14-3B6D-4F81-A0C5-8E1D2F4B6A90</code></td>
+<td>Active</td>
+<td>Needle correction toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_sample_window</code></td>
+<td><code>385E0310-CE68-4F8D-9493-F069EF8F485B</code></td>
+<td>Active</td>
+<td>Level sample window.</td>
+</tr>
+<tr>
+<td><code>cfg_max_fps</code></td>
+<td><code>473E162D-FC44-45CF-807A-A5F100B686C0</code></td>
+<td>Active</td>
+<td>Maximum frames per second.</td>
+</tr>
+<tr>
+<td><code>cfg_round_corners</code></td>
+<td><code>4C99FF1D-28CE-406F-AB2A-105DEC4DC11A</code></td>
+<td>Active</td>
+<td>Rounded corner radius.</td>
+</tr>
+<tr>
+<td><code>cfg_timeout</code></td>
+<td><code>554AD54E-C110-41C4-8D38-6623B2E00C1A</code></td>
+<td>Active</td>
+<td>Background/transparency timeout.</td>
+</tr>
+<tr>
+<td><code>cfg_inertia</code></td>
+<td><code>6FFBFBE7-9E00-473E-A30A-E99CB5E8800B</code></td>
+<td>Reserved</td>
+<td>Needle inertia.</td>
+</tr>
+<tr>
+<td><code>cfg_downmix</code></td>
+<td><code>6C79D6FE-4F8F-4B1C-A47A-59975F5EBAD6</code></td>
+<td>Active</td>
+<td>Downmix channels toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_cubic_interpolation</code></td>
+<td><code>D005942F-399D-4763-B495-3887EEF18DC9</code></td>
+<td>Reserved</td>
+<td>Cubic interpolation.</td>
+</tr>
+<tr>
+<td><code>cfg_lock_tuning</code></td>
+<td><code>BBFD6455-5F48-4E79-A023-F582A2C4AA37</code></td>
+<td>Active</td>
+<td>Disable tuning toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_fullscreen</code></td>
+<td><code>349B0CD8-3A61-4328-BAE1-52C89FEE0430</code></td>
+<td>Active</td>
+<td>Disallow fullscreen toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_background</code></td>
+<td><code>E85F0D94-D654-46CD-8F8C-B4C893B0D67A</code></td>
+<td>Active</td>
+<td>Remove background toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_transparent</code></td>
+<td><code>D2124978-AF41-4EDF-9A54-0788BC530CEA</code></td>
+<td>Reserved</td>
+<td>Enable transparency.</td>
+</tr>
+<tr>
+<td><code>cfg_ignore</code></td>
+<td><code>E236AB91-15EE-4EBB-A9A9-E150CAD37B20</code></td>
+<td>Active</td>
+<td>Ignore panel defaults toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_pause</code></td>
+<td><code>AF200679-B16D-411E-9CD1-332817398C58</code></td>
+<td>Active</td>
+<td>Equivalent pause and stop toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_screensaver</code></td>
+<td><code>CA938CA1-3BEB-4E7C-A078-A9886E91391D</code></td>
+<td>Reserved</td>
+<td>Screensaver mode.</td>
+</tr>
+<tr>
+<td><code>cfg_proportional</code></td>
+<td><code>80985F2F-67D7-4C14-85C8-A0542922D206</code></td>
+<td>Reserved</td>
+<td>PID controller proportional term.</td>
+</tr>
+<tr>
+<td><code>cfg_integral</code></td>
+<td><code>1C8BE59B-6B09-4184-A4E8-D198EBE26109</code></td>
+<td>Reserved</td>
+<td>PID controller integral term.</td>
+</tr>
+<tr>
+<td><code>cfg_derivative</code></td>
+<td><code>40A4648C-3777-4188-BB08-C8476A2728CF</code></td>
+<td>Reserved</td>
+<td>PID controller derivative term.</td>
+</tr>
+<tr>
+<td><code>cfg_settle</code></td>
+<td><code>2F7A1C3D-9B4E-4A21-8C6F-112233445566</code></td>
+<td>Active</td>
+<td>VU ballistics settle (rise/fall) time.</td>
+</tr>
+<tr>
+<td><code>cfg_overshoot</code></td>
+<td><code>3E8B2D4E-AC5F-4B32-9D7A-223344556677</code></td>
+<td>Active</td>
+<td>VU ballistics overshoot.</td>
+</tr>
+<tr>
+<td><code>cfg_speed</code></td>
+<td><code>8EE17EAC-E63C-4AEB-91D7-76AEDAA37EB0</code></td>
+<td>Active</td>
+<td>Needle movement speed.</td>
+</tr>
+<tr>
+<td><code>cfg_damping</code></td>
+<td><code>A9EEFA40-6C9A-4583-80BA-DA279940E4D7</code></td>
+<td>Active</td>
+<td>Needle movement damping.</td>
+</tr>
+<tr>
+<td><code>cfg_vsync</code></td>
+<td><code>63D61429-0510-4107-B82D-28EA87EE3DDB</code></td>
+<td>Active</td>
+<td>Vertical synchronization toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_font</code></td>
+<td><code>BA10193B-9C66-4F8F-9D49-A529FF1C1510</code></td>
+<td>Active</td>
+<td>Counter font family.</td>
+</tr>
+<tr>
+<td><code>cfg_size</code></td>
+<td><code>0714F23B-D637-4CB2-A375-D24C2671DE7A</code></td>
+<td>Active</td>
+<td>Counter font size.</td>
+</tr>
+<tr>
+<td><code>cfg_weight</code></td>
+<td><code>AC5085D9-8B45-487F-8810-9F9DF1237450</code></td>
+<td>Active</td>
+<td>Counter font weight.</td>
+</tr>
+<tr>
+<td><code>cfg_style</code></td>
+<td><code>FD99483F-0850-41CA-909E-A2B65BB20224</code></td>
+<td>Active</td>
+<td>Counter font style.</td>
+</tr>
+<tr>
+<td><code>cfg_color</code></td>
+<td><code>5E0B88AC-E4E2-4AB4-9A1E-641A7AFCD70E</code></td>
+<td>Active</td>
+<td>Counter font color.</td>
+</tr>
+<tr>
+<td><code>cfg_panel</code></td>
+<td><code>BC6BEAFF-6845-4D3F-B641-240358C43A1B</code></td>
+<td>Reserved</td>
+<td>Selected panel/skin.</td>
 </tr>
 </tbody>
 </table>
