@@ -134,6 +134,9 @@ Proton</a></li>
 <li><a href="#window-scaling-under-wine-and-proton"
 id="toc-window-scaling-under-wine-and-proton">Window Scaling under Wine
 and Proton</a></li>
+<li><a href="#fullscreen-under-wine-and-proton-on-wayland"
+id="toc-fullscreen-under-wine-and-proton-on-wayland">Fullscreen under
+Wine and Proton on Wayland</a></li>
 <li><a href="#dynamics" id="toc-dynamics">Dynamics</a>
 <ul>
 <li><a href="#needle-behavior-derivation-methodology"
@@ -438,10 +441,9 @@ Default is 60 and the range is [24.0, 60.0] in unit steps.</li>
 <li><em>Corner</em>: sets the default corner radius width in pixels of
 the skin image size. Can also be set to enabled or disabled from the
 "Options" menu. Default is 16 and the range is [0.0, 32.0] in steps of
-1.6.</li>
+1.6.
+<!--- _Timeout_: sets the background window request message timeout in milliseconds during transparency. Default is 250 and the range is [15.0, 1000.0] in unit steps.--></li>
 </ul>
-<!--- _Timeout_: sets the background window request message timeout in milliseconds during transparency. Default is 250 and the range is [15.0, 1000.0] in unit steps.-->
-
 <p><em>Options</em>:</p>
 <ul>
 <li><em>Downmix Channels</em>: instructs foobar2000 to combine all
@@ -454,11 +456,8 @@ the mark. It is disabled by default.</li>
 correction for panels/skins whose frames are not linearly spaced,
 improving needle accuracy. It is enabled by default.</li>
 <li><em>Rounded Corners</em>: sets the corner tuning option to 0.0
-(unchecked) or 16.0 (checked and default).</li>
-</ul>
-<!--- _Cubic Interpolation_: selects between high quality cubic (enabled and default) and linear (disabled) Direct2D interpolation modes. **Option removed.**-->
-
-<ul>
+(unchecked) or 16.0 (checked and default).
+<!--- _Cubic Interpolation_: selects between high quality cubic (enabled and default) and linear (disabled) Direct2D interpolation modes. **Option removed.**--></li>
 <li><em>Disable Tuning</em>: disables the tuning menu and makes the
 component ignore the mouse wheel. The tuning menu is enabled by
 default.</li>
@@ -669,12 +668,12 @@ entry).</li>
 mode.</li>
 <li><code>Delete</code>: clears all text in text entry mode.</li>
 <li><code>Page Up</code> / <code>Page Down</code>: changes the texture
-in teapot mode.</li>
-</ul>
+in teapot mode.
 <!--- Konami Code (`Up Up Down Down Left Right Left Right B A`): activates the teapot easter egg.-->
 
 <!--- Doom cheat code (`I D D Q D`): activates the text entry easter egg.-->
-
+</li>
+</ul>
 <h2 id="running-foobar2000-under-proton">Running foobar2000 under
 Proton</h2>
 <p>When foobar2000 is installed as a non-Steam title, it can be launched
@@ -767,6 +766,34 @@ it.</li>
 decimal <code>REG_DWORD</code>, e.g. 120), which you can also set
 directly with <code>wine regedit</code> instead of winecfg.</p>
 </blockquote>
+<h2 id="fullscreen-under-wine-and-proton-on-wayland">Fullscreen under
+Wine and Proton on Wayland</h2>
+<p>On KDE Plasma (e.g. SteamOS Desktop) running the Wayland session, the
+visualization freezes within a second of entering fullscreen. It briefly
+resumes only while a context menu or dialog overlaps the window, then
+freezes again once that overlay closes. The effect affects any
+fullscreen visualization, regardless of the rendering API (Direct3D
+11/12, OpenGL or GDI).</p>
+<p>This is a compositor issue. When a window covers the whole screen,
+KWin promotes it to DRM <em>direct scan-out</em>: instead of compositing
+the window, KWin hands the client buffer straight to the display
+controller for page-flipping. Under the Wine Wayland driver, the buffer
+KWin latches for scan-out is not refreshed on subsequent presents, so
+the display keeps flipping the same stale frame. Rendering continues
+normally but the new frames never reach the screen. Overlapping the
+window with a menu or dialog forces KWin back into composited mode,
+which is why motion briefly returns while an overlay is visible.</p>
+<p>To work around the problem use either of the following:</p>
+<ul>
+<li><strong>Disable direct scan-out for the session.</strong> Create
+<code>~/.config/plasma-workspace/env/kwin-no-scanout.sh</code>
+containing <code>export KWIN_DRM_NO_DIRECT_SCANOUT=1</code>, then log
+out and back in. This keeps KWin compositing the fullscreen window so
+every presented frame is displayed.</li>
+<li><strong>Run under XWayland instead of native Wayland.</strong> Set
+<code>PROTON_ENABLE_WAYLAND=0</code> in the launch command shown above,
+which avoids the Wine Wayland driver's scan-out path.</li>
+</ul>
 <h2 id="dynamics">Dynamics</h2>
 <p>The needle movement can be approximated using the following formula:
 <code>display = old +/- (e ^ (new - old) - 1) * rise/decay</code>. The
@@ -870,8 +897,8 @@ Bytes:       |7F FF 7F FF 7F FF 7F FF 7F FF 28 BF 87 8A 8B 87 00 E0 E2 DE 05 D0 
 Pixel Bits:  |^^ **                              |   Bb Gg Rr Aa Bb Gg Rr|     |   Bb Gg Rr Aa Bb Gg Rr Aa Bb Gg Rr Aa Bb Gg Rr Aa Bb Gg Rr|     |   Bb Gg ...End|
              +-|--|------------------------------+-----------------------+-----+-----------------------------------------------------------+-----+---------...---+
                |  |
-               |  + more significant byte
-               + less significant byte
+               |  + odd byte (higher address, least significant)
+               + even byte (lower address, most significant)
 
 Notes
 -----
