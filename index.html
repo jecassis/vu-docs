@@ -334,7 +334,7 @@ Direct3D feature level 11_1.</li>
 (build 20260716.2, kernel 6.16.12-valve).</li>
 </ul></li>
 <li>Built for foobar2000 2.0 and later (2025-03-07) with latest Windows
-11 SDK (10.0.28000.2114) and MSVC (14.51).</li>
+11 SDK (10.0.28000.2526) and MSVC (14.51).</li>
 </ul>
 <h2 id="run-requirements-and-installation">Run Requirements and
 Installation</h2>
@@ -544,7 +544,8 @@ Default is 60 and the range is [24.0, 60.0] in unit steps.</li>
 <li><em>Corner</em>: sets the default corner radius width in pixels of
 the skin image size. Can also be set to enabled or disabled from the
 "Options" menu. Default is 16 and the range is [0.0, 32.0] in steps of
-1.6.
+1.6. The menu item is disabled and corner mouse-wheel adjustments are
+ignored when the host supports transparency.
 <!--- _Timeout_: sets the background window request message timeout in milliseconds during transparency. Default is 250 and the range is [15.0, 1000.0] in unit steps.-->
 </li>
 </ul>
@@ -560,7 +561,9 @@ the mark. It is disabled by default.</li>
 correction for panels/skins whose frames are not linearly spaced,
 improving needle accuracy. It is enabled by default.</li>
 <li><em>Rounded Corners</em>: sets the corner tuning option to 0.0
-(unchecked) or 16.0 (checked and default).
+(unchecked) or 16.0 (checked and default). Rounded corners are not drawn
+when the host supports transparency; this option is then unchecked and
+disabled, regardless of the <em>Enable Transparency</em> setting.
 <!--- _Cubic Interpolation_: selects between high quality cubic (enabled and default) and linear (disabled) Direct2D interpolation modes. **Option removed.**-->
 </li>
 <li><em>Disable Tuning</em>: disables the tuning menu and makes the
@@ -575,11 +578,11 @@ connected and not already in fullscreen.</li>
 <li><em>Remove Background</em>: removes the edge-sampled background and
 simply uses a dark or light mode default color. By default the sampled
 background is shown.</li>
-<li><em>Enable Transparency</em>: enables transparency in Columns UI for
-panels that support it such as JSP3 and JSplitter. Note that this mode
-incurs a heavy performance penalty when enabled; it is especially
-noticeable during windowing events such as resizing. As such it is
-disabled by default.</li>
+<li><em>Enable Transparency</em>: enables transparency for supported
+hosts, including JSP3, JSplitter, and FPrism. Note that this mode incurs
+a heavy performance penalty when enabled; it is especially noticeable
+during windowing events such as resizing. As such it is disabled by
+default.</li>
 <li><em>Ignore Defaults</em>: ignores the defaults set in
 <code>.ini</code> files that may accompany the <code>.bin</code> files,
 both loose and archived in <code>.rar</code> or <code>.7z</code>, and
@@ -704,26 +707,38 @@ dark mode selection in foobar2000.</li>
 <em>Mix</em> dialog box. Notes:</p>
 <ul>
 <li>Only one dialog box can be open at a time and it is modeless.</li>
-<li>The mix will affect every instance, however the color box only
-affects the instance where the dialog was launched.</li>
+<li>The mix will affect every instance, however the background and
+rounded corner colors only affect the instance where the dialog was
+launched. Both color overrides are saved with that instance's
+configuration.</li>
 <li>The sliders have their loudest setting (0 dB) at the top and their
 quietest (-12 dB) at the bottom.</li>
 <li>While audio is playing, each slider's thumb is colored to indicate
 whether that channel carries signal in the current track: green when the
 channel is present and gold/amber when it is absent. When nothing is
 playing, the sliders use the default theme thumb.</li>
-<li>The color box will only appear for <code>.bin</code> panels. It
-contains the edge-sampled RGB hexadecimal background color. It can be
-changed to any other valid color, overriding the automatically-sampled
-color.</li>
+<li>Two color swatches replace the hexadecimal color box. Click an
+enabled swatch to open a color picker; the swatches show the current
+colors and include tooltips. Disabled swatches remain visible with a
+crosshatch overlay.</li>
+<li>The background swatch shows the edge-sampled or overridden
+background color. It is enabled for supported panels, including
+<code>.bin</code> and VUEditor <code>.vu</code> panels, when <em>Remove
+Background</em> is off.</li>
+<li>The rounded corner swatch sets a separate corner color. It is
+enabled when a panel is loaded, the corner radius is greater than zero,
+and the host does not support transparency. Without an override, the
+corner color follows the player's light or dark theme.</li>
 <li>The "Enable mixer" checkbox is automatically selected and
 deselected. It is selected when the level mode is <em>not</em> Loudness
 (LUFS).</li>
 <li>Clicking the "Default" button will reset the mixer sliders to their
-default values and the color box to the edge-sampled value.</li>
-<li>Clicking "Cancel" or "X" (in the system menu bar) will undo any
-changes back to the state when the dialog box was opened. Either of
-these will also close the dialog box.</li>
+default values and clear the overrides for enabled color swatches. The
+background returns to its automatic color and the rounded corners return
+to the theme color.</li>
+<li>Clicking "Cancel" or "X" (in the system menu bar) will restore the
+mixer values and both color overrides to the state when the dialog box
+was opened. Either of these will also close the dialog box.</li>
 <li>Clicking "OK" will keep the changes and close the dialog box.</li>
 <li>The left channels are front left (L) [0 dB], back left (BL) [-3 dB],
 front center left (FCL) [-6 dB], side left (SL) [-3 dB], top front left
@@ -757,7 +772,8 @@ within the same group.</li>
 <li><em>Pan</em> (vertical drag): adjusts the preamplifier gain
 (dragging up increases it, down decreases it) and turns off Automatic
 Gain Control.</li>
-<li><em>Pinch/zoom</em>: adjusts the rounded corner radius.</li>
+<li><em>Pinch/zoom</em>: adjusts the rounded corner radius, unless the
+host supports transparency.</li>
 <li><em>Two-finger tap</em>: toggles the frame counter.</li>
 </ul>
 <p>The pan and pinch gestures are ignored while tuning is disabled, a
@@ -1476,6 +1492,17 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#c
 <td>Gets or sets needle correction state.</td>
 </tr>
 <tr>
+<td><code>TruePeak</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets true peak (oversampled) for Peak and Mixed levels.</td>
+</tr>
+<tr>
+<td><code>RmsAes17</code></td>
+<td><code>BOOL</code>; get, put</td>
+<td>Gets or sets the AES17 +3 dB RMS reference for RMS and Mixed
+levels.</td>
+</tr>
+<tr>
 <td><code>RoundCorners</code></td>
 <td><code>FLOAT</code>; get, put</td>
 <td>Gets or sets corner rounding.</td>
@@ -2008,6 +2035,12 @@ Settings Saved on Close and Restored on Launch</h3>
 <td><code>AF200679-B16D-411E-9CD1-332817398C58</code></td>
 <td>Active</td>
 <td>Equivalent pause and stop toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_counter</code></td>
+<td><code>D3A7F1C2-4B8E-4F5A-9C21-7E6D0A3B9F14</code></td>
+<td>Active</td>
+<td>Show frame counter toggle.</td>
 </tr>
 <tr>
 <td><code>cfg_screensaver</code></td>
