@@ -265,6 +265,9 @@ and per-panel defaults from accompanying <code>.ini</code> files.</li>
 <strong>Mixed</strong> (RMS needle with Peak LEDs), or K-weighted
 momentary <strong>Loudness (LUFS)</strong> per ITU-R BS.1770-5 / EBU R
 128 via <code>libebur128</code>.</li>
+<li><strong>True Peak</strong> detection for Peak and Mixed levels,
+enabled by default, plus an optional <strong>AES17 +3 dB RMS
+reference</strong>.</li>
 <li>Channel modes: <strong>Stereo</strong>, <strong>Sum (L +
 R)</strong>, <strong>Sum (L || R)</strong>, and
 <strong>Mid/Side</strong>, with weighted multi-channel downmixing.</li>
@@ -278,8 +281,11 @@ spaced frames.</li>
 <ul>
 <li>Selectable movement models: <strong>No Inertia</strong>, <strong>ODE
 Roots</strong>, standards-based <strong>VU Ballistics</strong> (ANSI/IEC
-second-order, default), <strong>Spring-Mass-Damper</strong>, and
-<strong>Curve Fit</strong>.</li>
+second-order, default), <strong>Spring-Mass-Damper</strong>,
+<strong>Curve Fit</strong>, and <strong>PPM Type I (DIN/Nordic)</strong>
+or <strong>Type II (BBC/EBU)</strong>.</li>
+<li>Sample-by-sample VU and PPM detectors process contiguous audio
+independently of the rendering frame rate.</li>
 <li>Physically derived ballistics with exposed
 <strong>rise/decay/jitter</strong> knobs plus per-model parameters
 (settle/overshoot, speed/damping).</li>
@@ -322,9 +328,9 @@ two-finger tap).</li>
 </ul>
 <h2 id="verification">Verification</h2>
 <ul>
-<li>Tested on foobar2000 2.25.10 (x86 64-bit) and Microsoft Windows 11
+<li>Tested on foobar2000 2.26.2 (x86 64-bit) and Microsoft Windows 11
 (Build 26200).</li>
-<li>Tested with foobar2000 v2.25.10 (x64) under Proton Experimental
+<li>Tested with foobar2000 v2.26.2 (x64) under Proton Experimental
 (experimental-11.0-20260713 -- Wine 11.0):
 <ul>
 <li>Direct3D 11 via DXVK v3.0.1, HLSL compiled through vkd3d, running at
@@ -333,8 +339,8 @@ Direct3D feature level 11_1.</li>
 <li>Verification machine: AMD Navi 33 (RDNA 3) GPU on SteamOS 3.8.24
 (build 20260716.2, kernel 6.16.12-valve).</li>
 </ul></li>
-<li>Built for foobar2000 2.0 and later (2025-03-07) with latest Windows
-11 SDK (10.0.28000.2526) and MSVC (14.51).</li>
+<li>Built for foobar2000 2.0 and later (2026-10-01) with latest Windows
+11 SDK (10.0.28000.2705) and MSVC (14.51).</li>
 </ul>
 <h2 id="run-requirements-and-installation">Run Requirements and
 Installation</h2>
@@ -452,9 +458,12 @@ before mid and side components are calculated.</li>
 <p><em>Levels</em>:</p>
 <ul>
 <li><em>RMS</em>: the default and calculates root mean square of the
-samples in the sample window.</li>
-<li><em>Peak</em>: finds the highest (absolute value) sample in the
-sample window.</li>
+samples in the sample window, except when the selected movement uses a
+sample-driven VU or PPM detector (see <em>Movement</em>).</li>
+<li><em>Peak</em>: finds the highest absolute level in the sample
+window, using oversampled true-peak detection when <em>True Peak</em> is
+enabled or sample peaks when it is disabled. PPM movement uses its own
+quasi-peak detector for the needle.</li>
 <li><em>Mixed</em>: uses "RMS" for the needle/pin or main display
 element and, if the panel includes them, uses "Peak" for the
 LEDs/lamps.</li>
@@ -466,6 +475,15 @@ href="https://tech.ebu.ch/docs/r/r128.pdf">EBU R 128-2023</a> using the
 <code>libebur128</code> library. Stereo output meters the left and right
 channels independently (each needle reflects its own channel loudness);
 downmixed or mono output shares a single combined measurement.</li>
+<li><em>True Peak</em>: enables ITU-R BS.1770 oversampled peak detection
+through <code>libebur128</code>, including estimated peaks between
+samples. Enabled by default and available only for Peak and Mixed
+levels; in Mixed mode it affects the LEDs/lamps rather than the RMS
+needle.</li>
+<li><em>RMS +3 dB (AES17)</em>: raises the RMS reference by
+approximately 3.01 dB so a full-scale sine reads 0 dB instead of
+approximately -3.01 dB. Disabled by default and available only for RMS
+and Mixed levels; it does not change peak or LUFS readings.</li>
 </ul>
 <p><em>Movement</em>:</p>
 <ul>
@@ -474,12 +492,16 @@ movement.</li>
 <li><em>ODE Roots</em>: uses the roots of the mass-spring differential
 equation to simulate the needle movement.</li>
 <li><em>VU Ballistics</em>: the default and models standard ANSI/IEC VU
-meter ballistics as a second-order system. The tuning dialog has
-"Settle" and "Overshoot" parameters that are only enabled when this
-movement mode is selected. Settle (the rise/fall time to 99% of the
-target in milliseconds) can range is [50, 1000] ms (default is 300 ms)
-and Overshoot (a percentage of the target) from [0, 25]% (default is
-1.3%; standard VU is 1-1.5%).</li>
+meter ballistics as a second-order system. With RMS or Mixed levels, it
+processes rectified audio sample by sample, calibrated so a steady sine
+reads its RMS level (or its peak level with AES17 enabled). This is an
+average-responding VU measurement, not a windowed RMS measurement of
+arbitrary waveforms. With Peak or LUFS levels, the movement follows the
+measured level at frame time. The tuning dialog has "Settle" and
+"Overshoot" parameters that are only enabled when this movement mode is
+selected. Settle (the time to first reach 99% of a step target) ranges
+from [50, 1000] ms (default is 300 ms) and Overshoot (a percentage of
+the target) from [0, 25]% (default is 1.3%; standard VU is 1-1.5%).</li>
 <li><em>Spring-Mass-Damper</em>: uses the second-order roots of a
 spring-mass-damper system to simulate the needle movement. The tuning
 dialog has "Speed" and "Damping" parameters that are only enabled when
@@ -489,7 +511,19 @@ this movement mode is selected. Speed range is [0.3, 2.0] (default is
 exponential curve based on the sample rate and frame time. When this
 movement mode is selected, the "Window" tuning parameter range is
 restricted between 30 ms and 120 ms.</li>
+<li><em>PPM Type I (DIN/Nordic)</em>: models an IEC 60268-10 quasi-peak
+program meter with 5 ms integration and a 20 dB fall in 1.7
+seconds.</li>
+<li><em>PPM Type II (BBC/EBU)</em>: models an IEC 60268-10 quasi-peak
+program meter with 10 ms integration and a 24 dB fall in 2.8
+seconds.</li>
 </ul>
+<p>Both PPM models process rectified audio sample by sample for RMS,
+Peak, and Mixed levels; with LUFS they apply their response to the
+measured loudness at frame time. For RMS and Mixed levels, their
+steady-sine reading is scaled to the RMS reference unless AES17 is
+enabled. The <em>True Peak</em> option does not change the PPM needle
+detector; in Mixed mode it still controls the peak LEDs/lamps.</p>
 <p><em>Decay</em>:</p>
 <ul>
 <li><em>Slow</em>: sets the decay factor to 0.0075.</li>
@@ -538,7 +572,10 @@ scroll, the step size is 0.01</li>
 1.</li>
 </ul></li>
 <li><em>Window</em>: sets the sampling window size in milliseconds.
-Default is 64 and the range is [10.0, 400.0] in unit steps.</li>
+Default is 64 and the range is [10.0, 400.0] in unit steps.
+Sample-driven VU and PPM needles process contiguous audio rather than
+repeatedly measuring this window; peak LEDs/lamps still use the window,
+while LUFS uses its fixed 400 ms window.</li>
 <li><em>FPS</em>: sets the maximum number of frames rendered per second.
 Default is 60 and the range is [24.0, 60.0] in unit steps.</li>
 <li><em>Corner</em>: sets the default corner radius width in pixels of
@@ -942,10 +979,20 @@ every presented frame is displayed.</li>
 which avoids the Wine Wayland driver's scan-out path.</li>
 </ul>
 <h2 id="dynamics">Dynamics</h2>
-<p>The needle movement can be approximated using the following formula:
-<code>display = old +/- (e ^ (new - old) - 1) * rise/decay</code>. The
-rise or decay factor limits how far the needle can move per frame or
-iteration of the calculation.</p>
+<p>The legacy rise/decay response can be approximated using the
+following formula:
+<code>display = old +/- (e ^ (new - old) - 1) * rise/decay</code>. This
+is not a general formula for every movement model: VU Ballistics uses an
+exactly discretized second-order system, while the PPM models use
+exponential attack and return responses.</p>
+<p>For RMS and Mixed levels, VU Ballistics advances on every fresh audio
+sample. PPM Type I and Type II do the same for RMS, Peak, and Mixed
+levels. These detectors consume contiguous audio rather than
+reprocessing overlapping sample windows, so changing the rendering FPS
+does not change their sample-domain response. Other movement/level
+combinations follow frame-time measurements, with elapsed-time
+compensation for the movement response. LUFS also consumes fresh audio,
+maintaining its own 400 ms measurement window.</p>
 <p>The needle position, frame number in foobar2000 <code>.bin</code>
 panels or angle in AIMP analog <code>.zip</code> skins, is calculated
 using the point-slope equation referenced to the zero dB frame or angle.
@@ -1957,6 +2004,18 @@ Settings Saved on Close and Restored on Launch</h3>
 <td><code>7C2A9E14-3B6D-4F81-A0C5-8E1D2F4B6A90</code></td>
 <td>Active</td>
 <td>Needle correction toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_true_peak</code></td>
+<td><code>0024A238-1701-445B-8470-201BD839FC6B</code></td>
+<td>Active</td>
+<td>True-peak detection toggle.</td>
+</tr>
+<tr>
+<td><code>cfg_rms_aes17</code></td>
+<td><code>47FE043D-2464-45F5-93D4-FC3F4FBC0E7F</code></td>
+<td>Active</td>
+<td>AES17 RMS reference toggle.</td>
 </tr>
 <tr>
 <td><code>cfg_sample_window</code></td>
